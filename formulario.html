@@ -7,46 +7,49 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg: #f3f4f6; /* gris claro texturizado (fondo) */
+    --bg: #f3f4f6;
     --card-bg: #ffffff;
     --text: #000000;
     --muted: #6b7280;
-    --accent: #f3ae00; /* --color-naranja: Sustituir por tu naranja corporativo */
-	--industrial: #f3ae00;
+    --accent: #f3ae00;
+	  --industrial: #E1AA00;
     --black: #000000;
     --white: #ffffff;
     --shadow: 0 6px 18px rgba(0,0,0,0.08);
   }
-  /* Si deseas cambiar el naranja corporativo, reemplaza --accent arriba por tu color exacto */
+  
   body{
     font-family: 'Poppins', 'Open Sans', Arial, sans-serif;
     background: var(--black);
     margin: 0; padding: 24px; color: var(--text);
   }
+
   .wrap{
     max-width: 820px; margin: 24px auto;
   }
+
   .card{
 	background: var(--industrial);
     border-radius: 12px; padding: 22px;
     box-shadow: var(--shadow);
     border: 1px solid rgba(0,0,0,0.04);
   }
+
   .header {
 	width: 100%;
 	text-align: center;
 	background: black;
 	border-bottom: 4px solid var(--accent);
 	box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-	padding: 0; /* elimina espacio extra */
-	border-radius: 12px; /* 🔹 esquinas redondeadas */
-	overflow: hidden;    /* 🔹 evita que la imagen sobresalga */
+	padding: 0;
+	border-radius: 12px;
+	overflow: hidden;    
   }
 
   .header .logo {
-	width: 100%;          /* ocupa todo el ancho disponible */
-	max-height: 180px;    /* 🔧 ajusta la altura máxima para no deformar */
-	object-fit: contain;  /* mantiene proporciones del logo */
+	width: 100%;
+	max-height: 180px; 
+	object-fit: contain; 
 	display: block;
 	margin: 0 auto;
   }
@@ -54,7 +57,7 @@
   .header h1 {
 	margin: 0;
 	font-size: 1.8rem;
-	color: var(--accent);        /* naranja corporativo */
+	color: var(--industrial);
   }
 
   .header .lead {
@@ -77,7 +80,7 @@
 
   #Inscripcion h1 {
 	font-size: 1.8rem;
-	color: var(--black); /* naranja corporativo */
+	color: var(--black);
   }
 
   #Inscripcion .lead {
@@ -107,6 +110,12 @@
     font-weight:700; cursor:pointer; font-size:15px;
   }
   .btn.secondary{ background:#111827; color:var(--white); }
+  
+  .loader { display:none; border:6px solid #f3f3f3; border-top:6px solid var(--accent); border-radius:50%; width:50px; height:50px; animation:spin 1s linear infinite; margin:20px auto; }
+  @keyframes spin { 0%{transform:rotate(0deg);} 100%{transform:rotate(360deg);} }
+
+  .confirmation { display:none; text-align:center; margin-top:20px; background:#000; color:#fff; padding:20px; border-radius:16px; }
+  .confirmation h2{ color:var(--accent); margin-bottom:10px; }
 
   footer.legal{ margin-top:18px; font-size:12px; color:var(--muted); }
 
@@ -217,16 +226,16 @@
 		  <div class="radio-group">
             <label><input type="radio" name="pago" value="Efectivo" required> Efectivo (Máximo hasta el día 5 de cada mes)</label>
           </div>
-		  <p class="muted-small">
-			En caso de devolución del recibo, se cobrarán 8 € por costes bancarios. Si no se realiza el pago antes del día 5, el recibo se girará automáticamente. Si la deuda no se paga antes del día 8, la membresía se dará de baja y deberá reiniciarse la inscripción con los pagos correspondientes. La solicitud de baja deberá realizarse antes del día 25 de cada mes.
+		      <p class="muted-small">
+			      En caso de devolución del recibo, se cobrarán 8 € por costes bancarios. Si no se realiza el pago antes del día 5, el recibo se girará automáticamente. Si la deuda no se paga antes del día 8, la membresía se dará de baja y deberá reiniciarse la inscripción con los pagos correspondientes. La solicitud de baja deberá realizarse antes del día 25 de cada mes.
           </p>
         </div>
 
         <div class="full">
           <label>Número de cuenta IBAN</label>
           <input name="iban" type="text">
-		  <p class="muted-small">
-			Autorizo a Industrial Training a gestionar los pagos de mis cuotas mediante domiciliación bancaria conforme a la normativa SEPA (Reglamento UE 260/2012). Declaro que los datos bancarios proporcionados son veraces y autorizo su uso exclusivo para este fin.
+		      <p class="muted-small">
+			      Autorizo a Industrial Training a gestionar los pagos de mis cuotas mediante domiciliación bancaria conforme a la normativa SEPA (Reglamento UE 260/2012). Declaro que los datos bancarios proporcionados son veraces y autorizo su uso exclusivo para este fin.
           </p>
         </div>
 
@@ -252,6 +261,13 @@
         <button type="submit" class="btn">Enviar inscripción</button>
       </div>
 
+      <div class="loader" id="loader"></div>
+
+      <div class="confirmation" id="confirmacion">
+        <h2>✅ Formulario enviado correctamente</h2>
+        <p>Gracias por su inscripción en <b>Industrial Training</b>. Nos pondremos en contacto muy pronto.</p>
+      </div>
+
       <footer class="legal">
 	      <p class="muted-small">
             <strong>Protección de datos:</strong> De acuerdo con el Reglamento (UE) 2016/679 (RGPD) y la Ley Orgánica 3/2018 (LOPDGDD), se informa que el responsable del tratamiento de la información es Industrial Training, con la finalidad de gestionar inscripciones, cobros y actividades del gimnasio.
@@ -262,10 +278,8 @@
 </div>
 
 <script>
-  // Fecha actual
   document.getElementById('fecha_actual').value = new Date().toLocaleDateString('es-ES');
 
-  // Firma: simple dibujo en canvas (desktop + touch)
   (function(){
     const canvas = document.getElementById('firma');
     const ctx = canvas.getContext('2d');
@@ -310,21 +324,25 @@
 
     document.getElementById('borrar').addEventListener('click', function(){ ctx.clearRect(0,0,canvas.width,canvas.height); });
 
-    // Submit
     const form = document.getElementById('formulario');
+    const loader = document.getElementById('loader');
+    const confirmacion = document.getElementById('confirmacion');
     form.addEventListener('submit', function(e){
       e.preventDefault();
       const dataUrl = canvas.toDataURL('image/png');
       const data = new FormData(form);
       data.append('firma', dataUrl);
+      data.append('formulario_html', document.documentElement.outerHTML);
 
-      // scriptURL - cuando desplegues como Web App, sustituye por la URL de tu App si no usas doGet
-      const scriptURL = '<?= ScriptApp.getService().getUrl() ?>';
+      const scriptURL = 'https://script.google.com/macros/s/AKfycbx8BWMBA-X5rQERw-GxxISXfYYPzdbamSBWGQmHjanwUZkGYCcj6znYNkGSqSbZeOUCVg/exec';
 
       fetch(scriptURL, { method: 'POST', body: data })
         .then(r => r.text())
         .then(txt => {
+          loader.style.display='none';
           if(txt && txt.startsWith('OK')) {
+            form.style.display='none';
+            confirmacion.style.display='block';
             alert('¡Formulario enviado correctamente!');
             form.reset();
             ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -333,6 +351,7 @@
           }
         })
         .catch(err => {
+          loader.style.display='none';
           alert('Error al enviar: ' + err);
         });
     });
