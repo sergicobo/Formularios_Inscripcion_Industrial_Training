@@ -1,0 +1,23 @@
+# Archivos de Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Archivos temporales
+*.log
+*.tmp
+*.bak
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Archivos binarios y compilados
+bin/
+obj/
+
+# Archivos de sistema
+.DS_Store
+.idea/
+.vscode/
