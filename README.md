@@ -1,5 +1,5 @@
 ## Formularios_Inscripcion_Industrial_Training
-Pagina de inscripcion de clientes para Industrial Training
+Página de inscripción de clientes para Industrial Training
 
 ## Descripción
 Este proyecto es una página web diseñada para que los clientes puedan inscribirse en un programa de entrenamiento industrial. 
@@ -20,7 +20,7 @@ número de teléfono y detalles del programa de entrenamiento deseado.
 - JavaScript
 
 ## Instalación
-1. Clona el repositorio: `git clone
+1. Clona el repositorio: `git clone`
 2. Navega al directorio del proyecto: `cd Formularios_Inscripcion_Industrial_Training`
 3. Abre el archivo `index.html` en tu navegador web.
 
