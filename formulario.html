@@ -16,6 +16,8 @@
             --black: #000000;
             --white: #ffffff;
             --shadow: 0 6px 18px rgba(0,0,0,0.08);
+            --error: #dc2626;
+            --success: #059669;
         }
 
         body {
@@ -70,13 +72,6 @@
                 margin-top: 0.5rem;
             }
 
-        <!-- .header {
-            display: flex;
-            gap: 16px;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-        -->
         .logo {
             max-height: 72px;
             object-fit: contain;
@@ -175,13 +170,26 @@
             font-weight: 700;
             cursor: pointer;
             font-size: 15px;
+            transition: all 0.3s ease;
         }
+
+            .btn:hover {
+                opacity: 0.9;
+                transform: translateY(-1px);
+            }
+
+            .btn:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+                transform: none;
+            }
 
             .btn.secondary {
                 background: #111827;
                 color: var(--white);
             }
 
+        /* Loader mejorado */
         #loader {
             display: none;
             position: fixed;
@@ -189,44 +197,114 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.8);
             z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+            #loader .spinner {
+                border: 6px solid #333;
+                border-top: 6px solid var(--industrial);
+                border-radius: 50%;
+                width: 60px;
+                height: 60px;
+                animation: spin 1s linear infinite;
+                margin-bottom: 20px;
+            }
+
+            #loader .loader-text {
+                color: var(--white);
+                font-size: 1.1rem;
+                font-weight: 600;
+                text-align: center;
+            }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Mensajes de confirmación y error personalizados */
+        .message-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 10000;
             justify-content: center;
             align-items: center;
         }
 
-            #loader div {
-                border: 6px solid #f3f4f6;
-                border-top: 6px solid #E1AA00;
-                border-radius: 50%;
-                width: 50px;
-                height: 50px;
-                animation: spin 1s linear infinite;
-            }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        #confirmacion {
-            display: none;
-            text-align: center;
-            padding: 24px;
+        .message-box {
+            background: var(--white);
             border-radius: 12px;
-            background-color: #E1AA00;
-            color: #000000;
-            font-weight: 700;
-            font-size: 1.2rem;
-            margin-top: 20px;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+            padding: 40px;
+            max-width: 500px;
+            margin: 20px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            animation: messageSlideIn 0.3s ease-out;
         }
 
+        @keyframes messageSlideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .message-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .message-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--black);
+        }
+
+        .message-text {
+            font-size: 1rem;
+            color: var(--muted);
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .message-success .message-icon {
+            color: var(--success);
+        }
+
+        .message-error .message-icon {
+            color: var(--error);
+        }
+
+        .message-btn {
+            background: var(--industrial);
+            color: var(--black);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+            .message-btn:hover {
+                background: #c99700;
+                transform: translateY(-1px);
+            }
 
         footer.legal {
             margin-top: 18px;
@@ -247,6 +325,11 @@
             .logo {
                 max-height: 64px;
             }
+
+            .message-box {
+                margin: 10px;
+                padding: 30px 20px;
+            }
         }
     </style>
 </head>
@@ -254,7 +337,6 @@
     <div class="wrap">
         <div class="card">
             <div class="header">
-                <!-- Replace TU_LOGO.png with a file in the same folder or served; if serving from Apps Script logo is injected in PDF only -->
                 <img src="https://raw.githubusercontent.com/sergicobo/Formularios_Inscripcion_Industrial_Training/main/LOGO_INDUSTRIAL.png" alt="Industrial Training" class="logo">
             </div>
             <div id="Inscripcion">
@@ -382,16 +464,7 @@
                 </div>
 
                 <div style="margin-top:16px; text-align:right;">
-                    <button type="submit" class="btn">Enviar inscripción</button>
-                </div>
-
-                <div id="loader"><div></div></div>
-                <div id="confirmacion">¡Formulario enviado correctamente!</div>
-                <div class="loader" id="loader"></div>
-
-                <div class="confirmation" id="confirmacion">
-                    <h2>✅ Formulario enviado correctamente</h2>
-                    <p>Gracias por su inscripción en <b>Industrial Training</b>. Nos pondremos en contacto muy pronto.</p>
+                    <button type="submit" class="btn" id="submitBtn">Enviar inscripción</button>
                 </div>
 
                 <footer class="legal">
@@ -403,9 +476,63 @@
         </div>
     </div>
 
+    <!-- Loader mejorado -->
+    <div id="loader">
+        <div class="spinner"></div>
+        <div class="loader-text">Procesando su inscripción...<br>Por favor, espere.</div>
+    </div>
+
+    <!-- Mensaje de éxito -->
+    <div id="successMessage" class="message-container">
+        <div class="message-box message-success">
+            <div class="message-icon">✅</div>
+            <div class="message-title">¡Inscripción Enviada Correctamente!</div>
+            <div class="message-text">
+                Gracias por registrarse en <strong>Industrial Training</strong>.<br>
+                Su ficha de inscripción ha sido procesada exitosamente.<br>
+                Nos pondremos en contacto con usted muy pronto.
+            </div>
+            <button class="message-btn" onclick="closeMessage('successMessage')">Entendido</button>
+        </div>
+    </div>
+
+    <!-- Mensaje de error -->
+    <div id="errorMessage" class="message-container">
+        <div class="message-box message-error">
+            <div class="message-icon">❌</div>
+            <div class="message-title">Error al Enviar la Inscripción</div>
+            <div class="message-text" id="errorText">
+                Ha ocurrido un problema al procesar su inscripción.<br>
+                Por favor, revise los datos e inténtelo nuevamente.
+            </div>
+            <button class="message-btn" onclick="closeMessage('errorMessage')">Intentar de Nuevo</button>
+        </div>
+    </div>
+
     <script>
+        // Establecer fecha actual
         document.getElementById('fecha_actual').value = new Date().toLocaleDateString('es-ES');
 
+        // Funciones para manejar mensajes
+        function showMessage(messageId) {
+            document.getElementById(messageId).style.display = 'flex';
+        }
+
+        function closeMessage(messageId) {
+            document.getElementById(messageId).style.display = 'none';
+            if (messageId === 'successMessage') {
+                // Resetear formulario después de éxito
+                document.getElementById('formulario').reset();
+                // Limpiar firma
+                const canvas = document.getElementById('firma');
+                const ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                // Restaurar fecha
+                document.getElementById('fecha_actual').value = new Date().toLocaleDateString('es-ES');
+            }
+        }
+
+        // Funcionalidad de firma
         (function () {
             const canvas = document.getElementById('firma');
             const ctx = canvas.getContext('2d');
@@ -448,44 +575,245 @@
             canvas.addEventListener('mousemove', draw);
             canvas.addEventListener('touchmove', function (e) { e.preventDefault(); draw(e); }, { passive: false });
 
-            document.getElementById('borrar').addEventListener('click', function () { ctx.clearRect(0, 0, canvas.width, canvas.height); });
+            document.getElementById('borrar').addEventListener('click', function () { 
+                ctx.clearRect(0, 0, canvas.width, canvas.height); 
+            });
 
+            // Manejo del envío del formulario
             const form = document.getElementById('formulario');
             const loader = document.getElementById('loader');
-            const confirmacion = document.getElementById('confirmacion');
+            const submitBtn = document.getElementById('submitBtn');
+
             form.addEventListener('submit', function (e) {
                 e.preventDefault();
+                
+                // Mostrar loader y deshabilitar botón
                 loader.style.display = 'flex';
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Enviando...';
+                
                 const dataUrl = canvas.toDataURL('image/png');
                 const data = new FormData(form);
                 data.append('firma', dataUrl);
-                data.append('formulario_html', document.documentElement.outerHTML);
+                
+                // Generar HTML del formulario con datos completos para el PDF
+                const formDataForPdf = generateFormularioHTML(data);
+                data.append('formulario_html', formDataForPdf);
 
                 const scriptURL = 'https://script.google.com/macros/s/AKfycbx8BWMBA-X5rQERw-GxxISXfYYPzdbamSBWGQmHjanwUZkGYCcj6znYNkGSqSbZeOUCVg/exec';
 
                 fetch(scriptURL, { method: 'POST', body: data })
                     .then(r => r.text())
                     .then(txt => {
+                        // Ocultar loader y restaurar botón
                         loader.style.display = 'none';
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Enviar inscripción';
+                        
                         if (txt && txt.startsWith('OK')) {
-                            form.style.display = 'none';
-                            confirmacion.style.display = 'block';
-                            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                            setTimeout(() => {
-                                form.style.display = 'none';
-                                confirmacion.style.display = 'block';
-                                form.reset();
-                            }, 4000);
+                            showMessage('successMessage');
                         } else {
-                            alert('Respuesta del servidor: ' + txt);
+                            // Mostrar error con detalles
+                            document.getElementById('errorText').innerHTML = 
+                                'Ha ocurrido un problema al procesar su inscripción.<br>' +
+                                '<strong>Detalles del error:</strong><br>' + 
+                                (txt || 'Error desconocido') + '<br><br>' +
+                                'Por favor, revise los datos e inténtelo nuevamente.';
+                            showMessage('errorMessage');
                         }
                     })
                     .catch(err => {
+                        // Ocultar loader y restaurar botón
                         loader.style.display = 'none';
-                        alert('Error al enviar: ' + err);
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Enviar inscripción';
+                        
+                        // Mostrar error de conexión
+                        document.getElementById('errorText').innerHTML = 
+                            'Error de conexión al enviar el formulario.<br>' +
+                            '<strong>Detalles:</strong><br>' + err.message + '<br><br>' +
+                            'Por favor, verifique su conexión a internet e inténtelo nuevamente.';
+                        showMessage('errorMessage');
                     });
             });
+
+            // Función para generar HTML del formulario con los datos del usuario
+            function generateFormularioHTML(formData) {
+                const data = {};
+                for (let [key, value] of formData) {
+                    if (key !== 'firma' && key !== 'formulario_html') {
+                        data[key] = value;
+                    }
+                }
+
+                return `<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Ficha de Inscripción - Industrial Training</title>
+    <style>
+        body { 
+            font-family: 'Poppins', Arial, sans-serif; 
+            max-width: 800px; 
+            margin: 20px auto; 
+            padding: 20px; 
+            background: #E1AA00;
+            color: #000;
+        }
+        .header { 
+            text-align: center; 
+            background: black; 
+            color: #E1AA00; 
+            padding: 20px; 
+            border-radius: 12px; 
+            margin-bottom: 20px;
+        }
+        .title { 
+            font-size: 1.8rem; 
+            font-weight: 700; 
+            margin: 10px 0;
+        }
+        .subtitle { 
+            font-size: 1rem; 
+            margin-bottom: 10px;
+        }
+        .grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 15px; 
+            margin: 20px 0;
+        }
+        .full { 
+            grid-column: 1 / -1; 
+        }
+        .campo { 
+            background: white; 
+            padding: 12px; 
+            border-radius: 8px; 
+            border: 1px solid #ddd;
+        }
+        .label { 
+            font-weight: 600; 
+            color: #333; 
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        .value { 
+            color: #000; 
+            font-size: 14px;
+            min-height: 20px;
+        }
+        .firma-section { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 8px; 
+            text-align: center; 
+            margin-top: 20px;
+        }
+        .legal { 
+            font-size: 12px; 
+            color: #333; 
+            margin-top: 20px; 
+            padding: 15px; 
+            background: rgba(255,255,255,0.9); 
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="title">Ficha de Inscripción - Industrial Training</div>
+        <div class="subtitle">Formulario Completado</div>
+    </div>
+
+    <div class="grid">
+        <div class="campo">
+            <div class="label">Nombre</div>
+            <div class="value">${data.nombre || ''}</div>
+        </div>
+        <div class="campo">
+            <div class="label">Apellidos</div>
+            <div class="value">${data.apellidos || ''}</div>
+        </div>
+        <div class="campo full">
+            <div class="label">DNI</div>
+            <div class="value">${data.dni || ''}</div>
+        </div>
+        <div class="campo">
+            <div class="label">Fecha de nacimiento</div>
+            <div class="value">${data.fecha_nacimiento || ''}</div>
+        </div>
+        <div class="campo">
+            <div class="label">Teléfono</div>
+            <div class="value">${data.telefono || ''}</div>
+        </div>
+        <div class="campo full">
+            <div class="label">Dirección</div>
+            <div class="value">${data.direccion || ''}</div>
+        </div>
+        ${data.direccion2 ? `<div class="campo full">
+            <div class="label">Calle 2</div>
+            <div class="value">${data.direccion2}</div>
+        </div>` : ''}
+        <div class="campo">
+            <div class="label">Ciudad</div>
+            <div class="value">${data.ciudad || ''}</div>
+        </div>
+        <div class="campo">
+            <div class="label">Estado / Provincia</div>
+            <div class="value">${data.estado || ''}</div>
+        </div>
+        <div class="campo">
+            <div class="label">Código Postal</div>
+            <div class="value">${data.cp || ''}</div>
+        </div>
+        <div class="campo">
+            <div class="label">Email</div>
+            <div class="value">${data.email || ''}</div>
+        </div>
+        <div class="campo full">
+            <div class="label">Cuota</div>
+            <div class="value">${data.cuota || ''}</div>
+        </div>
+        <div class="campo full">
+            <div class="label">Autorización de derechos de imagen</div>
+            <div class="value">${data.imagen || ''}</div>
+        </div>
+        <div class="campo full">
+            <div class="label">Opciones de pago</div>
+            <div class="value">${data.pago || ''}</div>
+        </div>
+        <div class="campo full">
+            <div class="label">Número de cuenta IBAN</div>
+            <div class="value">${data.iban || ''}</div>
+        </div>
+        <div class="campo full">
+            <div class="label">Fecha actual</div>
+            <div class="value">${data.fecha_actual || ''}</div>
+        </div>
+        <div class="campo full">
+            <div class="label">Condiciones</div>
+            <div class="value">${data.conditions || ''}</div>
+        </div>
+    </div>
+
+    <div class="firma-section">
+        <div class="label">Firma del cliente</div>
+        <div style="margin-top: 10px; border: 1px solid #ddd; height: 150px; display: flex; align-items: center; justify-content: center; background: #fafafa;">
+            [Firma capturada digitalmente]
+        </div>
+    </div>
+
+    <div class="legal">
+        <strong>Información sobre pagos:</strong> En caso de devolución del recibo, se cobrarán 8 € por costes bancarios. Si no se realiza el pago antes del día 5, el recibo se girará automáticamente. Si la deuda no se paga antes del día 8, la membresía se dará de baja y deberá reiniciarse la inscripción con los pagos correspondientes. La solicitud de baja deberá realizarse antes del día 25 de cada mes.<br><br>
+        
+        <strong>Autorización SEPA:</strong> Autorizo a Industrial Training a gestionar los pagos de mis cuotas mediante domiciliación bancaria conforme a la normativa SEPA (Reglamento UE 260/2012). Declaro que los datos bancarios proporcionados son veraces y autorizo su uso exclusivo para este fin.<br><br>
+        
+        <strong>Protección de datos:</strong> De acuerdo con el Reglamento (UE) 2016/679 (RGPD) y la Ley Orgánica 3/2018 (LOPDGDD), se informa que el responsable del tratamiento de la información es Industrial Training, con la finalidad de gestionar inscripciones, cobros y actividades del gimnasio.
+    </div>
+</body>
+</html>`;
+            }
         })();
     </script>
 </body>
