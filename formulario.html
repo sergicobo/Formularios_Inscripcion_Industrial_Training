@@ -561,21 +561,21 @@
             <form id="formulario">
                 <div class="grid">
                     <div>
-                        <label>Nombre</label>
+                        <label>Nombre *</label>
                         <input name="nombre" type="text" required>
                     </div>
                     <div>
-                        <label>Apellidos</label>
+                        <label>Apellidos *</label>
                         <input name="apellidos" type="text" required>
                     </div>
 
                     <div class="full">
-                        <label>DNI</label>
+                        <label>DNI *</label>
                         <input name="dni" type="text" required>
                     </div>
 
                     <div>
-                        <label>Fecha de nacimiento</label>
+                        <label>Fecha de nacimiento *</label>
                         <div class="date-selector">
                             <select id="birth_day" class="day-select" required>
                                 <option value="">Día</option>
@@ -602,12 +602,12 @@
                         <input name="fecha_nacimiento" id="fecha_nacimiento_hidden" type="hidden" required>
                     </div>
                     <div>
-                        <label>Teléfono</label>
+                        <label>Teléfono *</label>
                         <input name="telefono" type="tel" required>
                     </div>
 
                     <div class="full">
-                        <label>Dirección</label>
+                        <label>Dirección *</label>
                         <input name="direccion" type="text" required>
                     </div>
                     <div class="full">
@@ -616,25 +616,25 @@
                     </div>
 
                     <div>
-                        <label>Ciudad</label>
+                        <label>Ciudad *</label>
                         <input name="ciudad" type="text" required>
                     </div>
                     <div>
-                        <label>Estado / Provincia</label>
+                        <label>Estado / Provincia *</label>
                         <input name="estado" type="text" required>
                     </div>
 
                     <div>
-                        <label>Código Postal</label>
+                        <label>Código Postal *</label>
                         <input name="cp" type="text" required>
                     </div>
                     <div>
-                        <label>Email</label>
+                        <label>Email *</label>
                         <input name="email" type="email" required>
                     </div>
 
                     <div class="full">
-                        <label>Cuota</label>
+                        <label>Cuota *</label>
                         <select name="cuota" required>
                             <option value="">Selecciona...</option>
                             <option>Bronce (55€/mes x 2 wods a la semana)</option>
@@ -649,7 +649,7 @@
                     </div>
 
                     <div class="full">
-                        <label>Autorización de derechos de imagen</label>
+                        <label>Autorización de derechos de imagen *</label>
                         <div class="radio-group">
                             <label><input type="radio" name="imagen" value="Si autorizo" required> Si autorizo a Industrial Training a captar y utilizar mi imagen (fotografías o vídeos) tomadas durante actividades o eventos del gimnasio, con fines informativos y/o promocionales en medios físicos o digitales del centro.</label>
                         </div>
@@ -659,7 +659,7 @@
                     </div>
 
                     <div class="full">
-                        <label>Opciones de pago</label>
+                        <label>Opciones de pago *</label>
                         <div class="radio-group">
                             <label><input type="radio" name="pago" value="Domiciliación día 28" required> Domiciliación día 28</label>
                         </div>
@@ -675,7 +675,7 @@
                     </div>
 
                     <div class="full">
-                        <label>Número de cuenta IBAN</label>
+                        <label>Número de cuenta IBAN *</label>
                         <input name="iban" type="text">
                         <p class="muted-small">
                             Autorizo a Industrial Training a gestionar los pagos de mis cuotas mediante domiciliación bancaria conforme a la normativa SEPA (Reglamento UE 260/2012). Declaro que los datos bancarios proporcionados son veraces y autorizo su uso exclusivo para este fin.
@@ -688,10 +688,13 @@
                     </div>
 
                     <div class="full">
-                        <label>Firma del cliente</label>
+                        <label>Firma del cliente *</label>
                         <div class="firma-box">
                             <canvas id="firma" width="560" height="180"></canvas>
                             <button type="button" id="borrar" class="btn secondary">Borrar firma</button>
+                            <p class="muted-small" style="margin-top: 8px;">
+                                <strong>* Campo obligatorio:</strong> Firme en el recuadro superior para completar su inscripción.
+                            </p>
                             <div class="radio-group">
                                 <label><input type="radio" name="conditions" value="Aceptado" required> Declaro haber leído y aceptado las condiciones anteriores, así como las normas internas de Industrial Training.</label>
                             </div>
@@ -956,6 +959,33 @@
 
             form.addEventListener('submit', function (e) {
                 e.preventDefault();
+                
+                // Validar que la firma esté presente
+                const canvas = document.getElementById('firma');
+                const ctx = canvas.getContext('2d');
+                
+                // Verificar si el canvas tiene contenido (no está en blanco)
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = imageData.data;
+                let hasContent = false;
+                
+                // Revisar si hay algún pixel que no sea transparente
+                for (let i = 3; i < data.length; i += 4) {
+                    if (data[i] !== 0) { // Alpha channel diferente de 0
+                        hasContent = true;
+                        break;
+                    }
+                }
+                
+                if (!hasContent) {
+                    // Mostrar error si no hay firma
+                    document.getElementById('errorText').innerHTML = 
+                        '<strong>Firma requerida:</strong><br>' +
+                        'Por favor, firme en el recuadro antes de enviar el formulario.<br><br>' +
+                        'La firma es obligatoria para completar la inscripción.';
+                    showMessage('errorMessage');
+                    return;
+                }
                 
                 // Mostrar loader y deshabilitar botón
                 loader.style.display = 'flex';
