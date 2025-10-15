@@ -80,6 +80,23 @@ function doPost(e) {
     var conditions = params.conditions === 'Condiciones' ? 'Aceptado' : (params.conditions || '');
     var fecha_actual = params.fecha_actual || Utilities.formatDate(new Date(), Session.getScriptTimeZone(), "dd/MM/yyyy");
 
+    // Función para formatear fecha de ISO (YYYY-MM-DD) a DD/MM/YYYY
+    function formatDateToDDMMYYYY(isoDate) {
+      if (!isoDate) return '';
+      try {
+        var parts = isoDate.split('-');
+        if (parts.length === 3) {
+          return parts[2] + '/' + parts[1] + '/' + parts[0];
+        }
+        return isoDate; // Si no es formato ISO, devolver como está
+      } catch (err) {
+        return isoDate; // En caso de error, devolver como está
+      }
+    }
+
+    // Formatear fecha de nacimiento para mostrar
+    var fechaNacimientoFormateada = formatDateToDDMMYYYY(fecha_nacimiento);
+
     // Carpeta principal
     var mainFolder;
     try {
@@ -101,12 +118,12 @@ function doPost(e) {
         .setMimeType(ContentService.MimeType.TEXT);
     }
 
-    // Crear datos.txt
+    // Crear datos.txt con fecha formateada
     var contenido =
       'Nombre: ' + nombre + '\n' +
       'Apellidos: ' + apellidos + '\n' +
       'DNI: ' + dni + '\n' +
-      'Fecha de Nacimiento: ' + fecha_nacimiento + '\n' +
+      'Fecha de Nacimiento: ' + fechaNacimientoFormateada + '\n' +
       'Dirección: ' + direccion + (direccion2 ? (' / ' + direccion2) : '') + '\n' +
       'Ciudad: ' + ciudad + '\n' +
       'Estado/Provincia: ' + estado + '\n' +
@@ -201,6 +218,20 @@ function generateStyledFormHTML(params, firmaUrl) {
 
   // Procesar el valor de condiciones
   var conditionsValue = params.conditions === 'Condiciones' ? 'Aceptado' : (params.conditions || '');
+
+  // Función para formatear fecha de ISO (YYYY-MM-DD) a DD/MM/YYYY
+  function formatDateToDDMMYYYY(isoDate) {
+    if (!isoDate) return '';
+    try {
+      var parts = isoDate.split('-');
+      if (parts.length === 3) {
+        return parts[2] + '/' + parts[1] + '/' + parts[0];
+      }
+      return isoDate; // Si no es formato ISO, devolver como está
+    } catch (err) {
+      return isoDate; // En caso de error, devolver como está
+    }
+  }
 
   var html = `<!doctype html>
 <html lang="es">
@@ -407,7 +438,11 @@ function generateStyledFormHTML(params, firmaUrl) {
   addField('Nombre', params.nombre || '');
   addField('Apellidos', params.apellidos || '');
   addField('DNI', params.dni || '', true);
-  addField('Fecha de Nacimiento', params.fecha_nacimiento || '');
+  
+  // Formatear fecha de nacimiento
+  var fechaNacimientoFormateada = formatDateToDDMMYYYY(params.fecha_nacimiento || '');
+  addField('Fecha de Nacimiento', fechaNacimientoFormateada);
+  
   addField('Teléfono', params.telefono || '');
   
   // Dirección con manejo especial
