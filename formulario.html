@@ -1174,7 +1174,7 @@
                 const formData = new FormData(form);
                 formData.append('firma', dataUrl);
 
-                const scriptURL = '<?= scriptURL ?>' || 'https://script.google.com/macros/s/AKfycbx8BWMBA-X5rQERw-GxxISXfYYPzdbamSBWGQmHjanwUZkGYCcj6znYNkGSqSbZeOUCVg/exec';
+                const scriptURL = 'https://script.google.com/macros/s/AKfycbx8BWMBA-X5rQERw-GxxISXfYYPzdbamSBWGQmHjanwUZkGYCcj6znYNkGSqSbZeOUCVg/exec';
 
                 fetch(scriptURL, { method: 'POST', body: formData })
                     .then(r => r.text())
