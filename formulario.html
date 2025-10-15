@@ -1016,6 +1016,23 @@
                     }
                 }
 
+                // Función para formatear fecha de ISO (YYYY-MM-DD) a DD/MM/YYYY
+                function formatDateToDDMMYYYY(isoDate) {
+                    if (!isoDate) return '';
+                    try {
+                        var parts = isoDate.split('-');
+                        if (parts.length === 3) {
+                            return parts[2] + '/' + parts[1] + '/' + parts[0];
+                        }
+                        return isoDate; // Si no es formato ISO, devolver como está
+                    } catch (err) {
+                        return isoDate; // En caso de error, devolver como está
+                    }
+                }
+
+                // Formatear fecha de nacimiento
+                const fechaNacimientoFormateada = formatDateToDDMMYYYY(data.fecha_nacimiento || '');
+
                 return `<!doctype html>
 <html lang="es">
 <head>
@@ -1111,7 +1128,7 @@
         </div>
         <div class="campo">
             <div class="label">Fecha de nacimiento</div>
-            <div class="value">${data.fecha_nacimiento || ''}</div>
+            <div class="value">${fechaNacimientoFormateada}</div>
         </div>
         <div class="campo">
             <div class="label">Teléfono</div>
