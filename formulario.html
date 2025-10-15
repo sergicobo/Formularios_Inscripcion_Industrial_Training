@@ -240,6 +240,35 @@
                 margin-top: 8px;
             }
 
+        /* Selector de fecha personalizado */
+        .date-selector {
+            display: flex;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .date-selector select {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .date-selector .day-select {
+            flex: 0.8;
+        }
+
+        .date-selector .month-select {
+            flex: 1.2;
+        }
+
+        .date-selector .year-select {
+            flex: 1;
+        }
+
+        /* Hidden input for form submission */
+        #fecha_nacimiento_hidden {
+            display: none;
+        }
+
         /* Loader mejorado - Responsive */
         #loader {
             display: none;
@@ -429,6 +458,15 @@
                 margin: 8px;
                 padding: 24px 16px;
             }
+
+            .date-selector {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .date-selector select {
+                flex: none;
+            }
         }
 
         @media (min-width: 481px) and (max-width: 768px) {
@@ -538,7 +576,30 @@
 
                     <div>
                         <label>Fecha de nacimiento</label>
-                        <input name="fecha_nacimiento" type="date" required>
+                        <div class="date-selector">
+                            <select id="birth_day" class="day-select" required>
+                                <option value="">Día</option>
+                            </select>
+                            <select id="birth_month" class="month-select" required>
+                                <option value="">Mes</option>
+                                <option value="01">Enero</option>
+                                <option value="02">Febrero</option>
+                                <option value="03">Marzo</option>
+                                <option value="04">Abril</option>
+                                <option value="05">Mayo</option>
+                                <option value="06">Junio</option>
+                                <option value="07">Julio</option>
+                                <option value="08">Agosto</option>
+                                <option value="09">Septiembre</option>
+                                <option value="10">Octubre</option>
+                                <option value="11">Noviembre</option>
+                                <option value="12">Diciembre</option>
+                            </select>
+                            <select id="birth_year" class="year-select" required>
+                                <option value="">Año</option>
+                            </select>
+                        </div>
+                        <input name="fecha_nacimiento" id="fecha_nacimiento_hidden" type="hidden" required>
                     </div>
                     <div>
                         <label>Teléfono</label>
@@ -688,6 +749,110 @@
         // Establecer fecha actual
         document.getElementById('fecha_actual').value = new Date().toLocaleDateString('es-ES');
 
+        // Inicializar selector de fecha de nacimiento
+        function initBirthDateSelector() {
+            const daySelect = document.getElementById('birth_day');
+            const monthSelect = document.getElementById('birth_month');
+            const yearSelect = document.getElementById('birth_year');
+            const hiddenInput = document.getElementById('fecha_nacimiento_hidden');
+
+            // Poblar días (1-31)
+            for (let i = 1; i <= 31; i++) {
+                const option = document.createElement('option');
+                option.value = i.toString().padStart(2, '0');
+                option.textContent = i;
+                daySelect.appendChild(option);
+            }
+
+            // Poblar años (desde 1930 hasta año actual)
+            const currentYear = new Date().getFullYear();
+            for (let year = currentYear; year >= 1930; year--) {
+                const option = document.createElement('option');
+                option.value = year;
+                option.textContent = year;
+                yearSelect.appendChild(option);
+            }
+
+            // Función para actualizar el input hidden
+            function updateHiddenInput() {
+                const day = daySelect.value;
+                const month = monthSelect.value;
+                const year = yearSelect.value;
+
+                if (day && month && year) {
+                    // Validar que la fecha sea válida
+                    const date = new Date(year, parseInt(month) - 1, parseInt(day));
+                    if (date.getFullYear() == year && 
+                        date.getMonth() == parseInt(month) - 1 && 
+                        date.getDate() == parseInt(day)) {
+                        hiddenInput.value = `${year}-${month}-${day}`;
+                        hiddenInput.setCustomValidity('');
+                    } else {
+                        hiddenInput.value = '';
+                        hiddenInput.setCustomValidity('Fecha no válida');
+                    }
+                } else {
+                    hiddenInput.value = '';
+                    hiddenInput.setCustomValidity('Fecha de nacimiento requerida');
+                }
+            }
+
+            // Función para actualizar días según mes y año
+            function updateDays() {
+                const month = parseInt(monthSelect.value);
+                const year = parseInt(yearSelect.value);
+                const currentDay = daySelect.value;
+
+                // Limpiar opciones de días
+                daySelect.innerHTML = '<option value="">Día</option>';
+
+                if (month && year) {
+                    // Calcular días del mes
+                    const daysInMonth = new Date(year, month, 0).getDate();
+                    
+                    for (let i = 1; i <= daysInMonth; i++) {
+                        const option = document.createElement('option');
+                        option.value = i.toString().padStart(2, '0');
+                        option.textContent = i;
+                        daySelect.appendChild(option);
+                    }
+
+                    // Restaurar día seleccionado si es válido
+                    if (currentDay && parseInt(currentDay) <= daysInMonth) {
+                        daySelect.value = currentDay;
+                    }
+                } else {
+                    // Mostrar todos los días si no hay mes/año seleccionado
+                    for (let i = 1; i <= 31; i++) {
+                        const option = document.createElement('option');
+                        option.value = i.toString().padStart(2, '0');
+                        option.textContent = i;
+                        daySelect.appendChild(option);
+                    }
+                    if (currentDay) {
+                        daySelect.value = currentDay;
+                    }
+                }
+
+                updateHiddenInput();
+            }
+
+            // Event listeners
+            daySelect.addEventListener('change', updateHiddenInput);
+            monthSelect.addEventListener('change', () => {
+                updateDays();
+            });
+            yearSelect.addEventListener('change', () => {
+                updateDays();
+            });
+
+            // Inicializar validación
+            updateHiddenInput();
+        }
+
+        // Inicializar selector cuando se carga la página
+        document.addEventListener('DOMContentLoaded', initBirthDateSelector);
+
         // Funciones para manejar mensajes
         function showMessage(messageId) {
             document.getElementById(messageId).style.display = 'flex';
@@ -704,6 +869,11 @@
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 // Restaurar fecha
                 document.getElementById('fecha_actual').value = new Date().toLocaleDateString('es-ES');
+                // Resetear selector de fecha de nacimiento
+                document.getElementById('birth_day').selectedIndex = 0;
+                document.getElementById('birth_month').selectedIndex = 0;
+                document.getElementById('birth_year').selectedIndex = 0;
+                document.getElementById('fecha_nacimiento_hidden').value = '';
             }
         }
 
