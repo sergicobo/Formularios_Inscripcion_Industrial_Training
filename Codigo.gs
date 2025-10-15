@@ -14,13 +14,13 @@
  * Deploy as "Web app" (Execute as: Me; Access: Anyone, even anonymous) for public form usage.
  */
 
-// ⚙️ SUSTITUIR: coloca aquí el File ID de tu logo (opcional). Deja vacío '' si no quieres logo en PDF.
+ // ⚙️ SUSTITUIR: coloca aquí el File ID de tu logo (opcional). Deja vacío '' si no quieres logo en PDF.
 const LOGO_FILE_ID = '1wQ62DvlX4-DIwBkPj5Hg9-cpQvhPbcF7'; // ⚙️ Sustituir LOGO_FILE_ID aquí
 
 // ⚙️ SUSTITUIR: coloca aquí el ID de la Google Sheet donde quieres registrar los envíos (opcional).
 const SHEET_ID = ''; // ⚙️ Sustituir SHEET_ID aquí
 
-const MAIN_FOLDER_NAME = 'Fichas Inscripción IT';
+const MAIN_FOLDER_NAME = 'Fichas Inscripción IT' ;
 
 /**
  * doGet - sirve el formulario HTML incluido en el proyecto (archivo 'Formulario')
@@ -183,7 +183,7 @@ function doPost(e) {
 
 /**
  * Genera HTML estilizado para el PDF con el diseño de Industrial Training
- * Optimizado para evitar cortes de texto y adaptarse al tamaño del PDF
+ * Optimizado para una sola página con textos máximos y separación óptima
  */
 function generateStyledFormHTML(params, firmaUrl) {
   var logoDataUrl = '';
@@ -210,7 +210,7 @@ function generateStyledFormHTML(params, firmaUrl) {
     <style>
         @page {
             size: A4;
-            margin: 15mm 10mm 15mm 10mm;
+            margin: 9mm 7mm 9mm 7mm;
         }
         
         body {
@@ -219,53 +219,48 @@ function generateStyledFormHTML(params, firmaUrl) {
             padding: 0;
             background: #E1AA00;
             color: #000000;
-            line-height: 1.3;
-            font-size: 11px;
+            line-height: 1.2;
+            font-size: 14px;
         }
         
         .container {
             width: 100%;
             background: #E1AA00;
-            border-radius: 8px;
+            border-radius: 6px;
             overflow: hidden;
         }
         
         .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             background: #000000;
             color: #E1AA00;
-            text-align: center;
-            padding: 12px;
-            border-bottom: 3px solid #f3ae00;
-            margin-bottom: 12px;
+            padding: 10px 14px;
+            border-bottom: 2px solid #f3ae00;
+            margin-bottom: 10px;
         }
         
         .logo {
-            max-width: 150px;
-            max-height: 60px;
-            margin-bottom: 8px;
+            max-width: 120px;
+            max-height: 40px;
         }
         
-        .header h1 {
-            margin: 8px 0 4px 0;
-            font-size: 18px;
+        .header-title {
+            font-size: 21px;
             font-weight: bold;
-        }
-        
-        .header .subtitle {
             margin: 0;
-            font-size: 12px;
-            opacity: 0.9;
         }
         
         .content {
-            padding: 0 8px;
+            padding: 0 6px;
         }
         
         .grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 8px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             width: 100%;
         }
         
@@ -276,11 +271,11 @@ function generateStyledFormHTML(params, firmaUrl) {
         .field {
             background: #ffffff;
             padding: 8px;
-            border-radius: 4px;
+            border-radius: 3px;
             border: 1px solid #d1d5db;
             box-shadow: 0 1px 2px rgba(0,0,0,0.05);
             page-break-inside: avoid;
-            min-height: 32px;
+            min-height: 28px;
             display: flex;
             flex-direction: column;
         }
@@ -288,17 +283,17 @@ function generateStyledFormHTML(params, firmaUrl) {
         .field-label {
             font-weight: bold;
             color: #333333;
-            font-size: 9px;
-            margin-bottom: 3px;
+            font-size: 12px;
+            margin-bottom: 5px;
             text-transform: uppercase;
-            letter-spacing: 0.3px;
-            line-height: 1.2;
+            letter-spacing: 0.2px;
+            line-height: 1.1;
         }
         
         .field-value {
             color: #000000;
-            font-size: 10px;
-            line-height: 1.3;
+            font-size: 13px;
+            line-height: 1.2;
             word-wrap: break-word;
             word-break: break-word;
             hyphens: auto;
@@ -308,14 +303,14 @@ function generateStyledFormHTML(params, firmaUrl) {
         }
         
         .field-value.long-text {
-            font-size: 9px;
-            line-height: 1.2;
+            font-size: 12px;
+            line-height: 1.1;
         }
         
         .signature-section {
             background: #ffffff;
-            padding: 12px;
-            border-radius: 4px;
+            padding: 10px;
+            border-radius: 3px;
             border: 1px solid #d1d5db;
             text-align: center;
             margin: 8px 0;
@@ -324,69 +319,65 @@ function generateStyledFormHTML(params, firmaUrl) {
         }
         
         .signature-image {
-            max-width: 300px;
-            max-height: 100px;
+            max-width: 200px;
+            max-height: 55px;
             border: 1px solid #333;
             border-radius: 2px;
             margin-top: 6px;
         }
         
-        .legal-section {
+        .legal-text {
             background: rgba(255,255,255,0.95);
-            padding: 8px;
-            border-radius: 4px;
+            padding: 5px 7px;
+            border-radius: 3px;
+            font-size: 8px;
+            color: #333333;
+            margin-top: 5px;
+            line-height: 1.1;
+            text-align: justify;
+            grid-column: 1 / -1;
+        }
+        
+        .final-legal {
+            background: rgba(255,255,255,0.95);
+            padding: 7px;
+            border-radius: 3px;
             font-size: 8px;
             color: #333333;
             margin-top: 8px;
-            line-height: 1.2;
-            page-break-inside: avoid;
-        }
-        
-        .legal-section h4 {
-            margin: 0 0 4px 0;
-            font-size: 9px;
-            color: #000000;
-        }
-        
-        .legal-section p {
-            margin: 4px 0;
+            line-height: 1.1;
             text-align: justify;
-        }
-        
-        .footer {
-            text-align: center;
-            margin-top: 12px;
-            font-size: 8px;
-            color: #555;
+            page-break-inside: avoid;
         }
         
         /* Especial para campos largos */
         .field.iban .field-value,
         .field.cuota .field-value,
         .field.direccion .field-value {
-            font-size: 9px;
-            line-height: 1.2;
+            font-size: 12px;
+            line-height: 1.1;
         }
         
         /* Evitar saltos de página problemáticos */
         .grid,
         .signature-section,
-        .legal-section {
+        .final-legal {
             page-break-inside: avoid;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">`;
+        <div class="header">
+            <div class="logo-container">`;
   
   if (logoDataUrl) {
     html += `<img src="${logoDataUrl}" alt="Industrial Training" class="logo">`;
   }
   
   html += `
-            <h1>Ficha de Inscripción</h1>
-            <div class="subtitle">Industrial Training</div>
+            </div>
+            <div class="header-title">Ficha de Inscripción</div>
         </div>
         <div class="content">
             <div class="grid">`;
@@ -404,6 +395,12 @@ function generateStyledFormHTML(params, firmaUrl) {
                     <div class="field-label">${label}</div>
                     <div class="field-value${specialClass}">${(value || '-').toString().replace(/\n/g, '<br>')}</div>
                 </div>`;
+  }
+
+  // Función auxiliar para agregar texto legal
+  function addLegalText(text) {
+    html += `
+                <div class="legal-text">${text}</div>`;
   }
 
   // Agregar todos los campos con optimizaciones específicas
@@ -425,17 +422,22 @@ function generateStyledFormHTML(params, firmaUrl) {
   // Cuota con manejo especial para texto largo
   addField('Cuota Seleccionada', params.cuota || '', true, true);
   addField('Derechos de Imagen', params.imagen || '', true, true);
-  addField('Opción de Pago', params.pago || '', true, true);
   
-  // IBAN con manejo especial
+  // Opción de pago con texto legal debajo
+  addField('Opción de Pago', params.pago || '', true, true);
+  addLegalText('<strong>Condiciones de Pago:</strong> En caso de devolución del recibo, se cobrarán 8 € por costes bancarios. Si no se realiza el pago antes del día 5, el recibo se girará automáticamente. Si la deuda no se paga antes del día 8, la membresía se dará de baja y deberá reiniciarse la inscripción con los pagos correspondientes. La solicitud de baja deberá realizarse antes del día 25 de cada mes.');
+  
+  // IBAN con texto legal debajo
   addField('IBAN', params.iban || '', true, true);
+  addLegalText('<strong>Autorización SEPA:</strong> El cliente autoriza a Industrial Training a gestionar los pagos de sus cuotas mediante domiciliación bancaria conforme a la normativa SEPA (Reglamento UE 260/2012). Declara que los datos bancarios proporcionados son veraces y autoriza su uso exclusivo para este fin.');
+  
   addField('Condiciones', conditionsValue, true);
   addField('Fecha de Inscripción', params.fecha_actual || '', true);
 
   html += `
             </div>`;
 
-  // Sección de firma
+  // Sección de firma más compacta
   if (firmaUrl && firmaUrl.indexOf('base64,') > -1) {
     html += `
             <div class="signature-section">
@@ -446,25 +448,16 @@ function generateStyledFormHTML(params, firmaUrl) {
     html += `
             <div class="signature-section">
                 <div class="field-label">Firma del Cliente</div>
-                <div style="height: 60px; border: 1px dashed #ccc; display: flex; align-items: center; justify-content: center; color: #666; font-style: italic; font-size: 9px;">
+                <div style="height: 44px; border: 1px dashed #ccc; display: flex; align-items: center; justify-content: center; color: #666; font-style: italic; font-size: 12px;">
                     Firma no proporcionada
                 </div>
             </div>`;
   }
 
-  // Sección legal optimizada
+  // Protección de datos al final
   html += `
-            <div class="legal-section">
-                <h4>Información Legal y Condiciones:</h4>
-                <p><strong>Condiciones de Pago:</strong> En caso de devolución del recibo, se cobrarán 8 € por costes bancarios. Si no se realiza el pago antes del día 5, el recibo se girará automáticamente. Si la deuda no se paga antes del día 8, la membresía se dará de baja y deberá reiniciarse la inscripción con los pagos correspondientes. La solicitud de baja deberá realizarse antes del día 25 de cada mes.</p>
-                
-                <p><strong>Autorización SEPA:</strong> El cliente autoriza a Industrial Training a gestionar los pagos de sus cuotas mediante domiciliación bancaria conforme a la normativa SEPA (Reglamento UE 260/2012). Declara que los datos bancarios proporcionados son veraces y autoriza su uso exclusivo para este fin.</p>
-                
-                <p><strong>Protección de Datos:</strong> De acuerdo con el Reglamento (UE) 2016/679 (RGPD) y la Ley Orgánica 3/2018 (LOPDGDD), se informa que el responsable del tratamiento de la información es Industrial Training, con la finalidad de gestionar inscripciones, cobros y actividades del gimnasio.</p>
-            </div>
-            
-            <div class="footer">
-                Documento generado el ${Utilities.formatDate(new Date(), Session.getScriptTimeZone(), "dd/MM/yyyy 'a las' HH:mm:ss")}
+            <div class="final-legal">
+                <strong>Protección de Datos:</strong> De acuerdo con el Reglamento (UE) 2016/679 (RGPD) y la Ley Orgánica 3/2018 (LOPDGDD), se informa que el responsable del tratamiento de la información es Industrial Training, con la finalidad de gestionar inscripciones, cobros y actividades del gimnasio.
             </div>
         </div>
     </div>
