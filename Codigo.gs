@@ -62,6 +62,15 @@ function doPost(e) {
         .setMimeType(ContentService.MimeType.TEXT);
     }
 
+    // Obtener firma para el PDF y validar que esté presente
+    var firmaUrl = params.firma || '';
+    
+    // Validar que la firma esté presente y tenga contenido
+    if (!firmaUrl || firmaUrl.indexOf('base64,') === -1) {
+      return ContentService.createTextOutput('ERROR: La firma es obligatoria. Por favor, firme en el recuadro antes de enviar el formulario.')
+        .setMimeType(ContentService.MimeType.TEXT);
+    }
+
     var nombre = params.nombre || '';
     var apellidos = params.apellidos || '';
     var dni = params.dni || '';
@@ -144,9 +153,6 @@ function doPost(e) {
       return ContentService.createTextOutput('ERROR: No se pudo crear el archivo de datos: ' + error.toString())
         .setMimeType(ContentService.MimeType.TEXT);
     }
-
-    // Obtener firma para el PDF (pero no guardarla como archivo)
-    var firmaUrl = params.firma || '';
 
     // Generar HTML mejorado para PDF con el estilo de Industrial Training
     var html = generateStyledFormHTML(params, firmaUrl);
