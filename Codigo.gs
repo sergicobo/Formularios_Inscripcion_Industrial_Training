@@ -8,7 +8,7 @@
  * The script supports:
  *  - doGet: serves the Formulario.html inside Apps Script (so one URL hosts the form)
  *  - doPost: receives form submissions, creates a folder per client inside "Fichas Inscripción IT",
- *            saves datos.txt, firma.png and generates a PDF with the data and embedded logo.
+ *            saves datos.txt and generates a PDF with the data and embedded logo.
  *  - logs entries into a Google Sheet (creates one if SHEET_ID left empty)
  *
  * Deploy as "Web app" (Execute as: Me; Access: Anyone, even anonymous) for public form usage.
@@ -38,7 +38,7 @@ function doGet(e) {
  * doPost - procesa envíos:
  *  - crea carpeta principal si no existe
  *  - crea carpeta por cliente (Nombre_Apellidos_DNI)
- *  - guarda datos.txt, firma.png (si viene) y genera PDF con datos+firma+logo
+ *  - guarda datos.txt y genera PDF con datos+firma+logo
  *  - añade una fila en la Sheet de registros con enlaces
  */
 function doPost(e) {
@@ -145,28 +145,8 @@ function doPost(e) {
         .setMimeType(ContentService.MimeType.TEXT);
     }
 
-    // Guardar firma (dataURL base64)
+    // Obtener firma para el PDF (pero no guardarla como archivo)
     var firmaUrl = params.firma || '';
-    var firmaFile = null;
-    if (firmaUrl && firmaUrl.indexOf('base64,') > -1) {
-      try {
-        var b64 = firmaUrl.split('base64,')[1];
-        var blob = Utilities.newBlob(Utilities.base64Decode(b64), 'image/png', 'firma.png');
-        firmaFile = clienteFolder.createFile(blob);
-      } catch (error) {
-        Logger.log('Warning: No se pudo guardar la firma: ' + error.toString());
-      }
-    }
-
-    // Guardar formulario.html completo (recibido del frontend)
-    var htmlForm = params.formulario_html || '';
-    if (htmlForm) {
-      try {
-        clienteFolder.createFile('formulario_completo.html', htmlForm, MimeType.HTML);
-      } catch (error) {
-        Logger.log('Warning: No se pudo guardar el formulario HTML: ' + error.toString());
-      }
-    }
 
     // Generar HTML mejorado para PDF con el estilo de Industrial Training
     var html = generateStyledFormHTML(params, firmaUrl);
@@ -183,7 +163,7 @@ function doPost(e) {
 
     // Registrar en Google Sheet
     try {
-      logToSheet(params, clienteFolder, datosFile, firmaFile, pdfFile, mainFolder);
+      logToSheet(params, clienteFolder, datosFile, pdfFile, mainFolder);
     } catch (error) {
       Logger.log('Warning: No se pudo registrar en la hoja de cálculo: ' + error.toString());
     }
@@ -505,7 +485,7 @@ function generateStyledFormHTML(params, firmaUrl) {
 /**
  * Registra la inscripción en Google Sheet
  */
-function logToSheet(params, clienteFolder, datosFile, firmaFile, pdfFile, mainFolder) {
+function logToSheet(params, clienteFolder, datosFile, pdfFile, mainFolder) {
   var sheet = null;
   
   // Intentar abrir sheet existente
@@ -543,7 +523,7 @@ function logToSheet(params, clienteFolder, datosFile, firmaFile, pdfFile, mainFo
     
     sheet = ss.getActiveSheet();
     if (sheet.getLastRow() === 0) {
-      sheet.appendRow(['Timestamp','Nombre','Apellidos','DNI','Email','Teléfono','Cuota','Carpeta_URL','datos.txt','firma.png','pdf']);
+      sheet.appendRow(['Timestamp','Nombre','Apellidos','DNI','Email','Teléfono','Cuota','Carpeta_URL','datos.txt','pdf']);
     }
   }
 
@@ -551,7 +531,6 @@ function logToSheet(params, clienteFolder, datosFile, firmaFile, pdfFile, mainFo
   try {
     var folderUrl = clienteFolder.getUrl();
     var datosUrl = datosFile ? datosFile.getUrl() : '';
-    var firmaUrlDrive = firmaFile ? firmaFile.getUrl() : '';
     var pdfUrl = pdfFile ? pdfFile.getUrl() : '';
 
     // Procesar el valor de condiciones para el sheet también
@@ -567,7 +546,6 @@ function logToSheet(params, clienteFolder, datosFile, firmaFile, pdfFile, mainFo
       params.cuota || '', 
       folderUrl, 
       datosUrl, 
-      firmaUrlDrive, 
       pdfUrl
     ]);
   } catch (err) {
