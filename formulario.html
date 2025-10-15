@@ -854,7 +854,18 @@
         }
 
         // Inicializar selector cuando se carga la página
-        document.addEventListener('DOMContentLoaded', initBirthDateSelector);
+        document.addEventListener('DOMContentLoaded', function() {
+            initBirthDateSelector();
+        });
+
+        // También ejecutar cuando se carga la ventana como respaldo
+        window.addEventListener('load', function() {
+            // Solo ejecutar si no se ha inicializado ya
+            const daySelect = document.getElementById('birth_day');
+            if (daySelect && daySelect.children.length <= 1) {
+                initBirthDateSelector();
+            }
+        });
 
         // Funciones para manejar mensajes
         function showMessage(messageId) {
@@ -966,12 +977,12 @@
                 
                 // Verificar si el canvas tiene contenido (no está en blanco)
                 const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                const data = imageData.data;
+                const pixelData = imageData.data;
                 let hasContent = false;
                 
                 // Revisar si hay algún pixel que no sea transparente
-                for (let i = 3; i < data.length; i += 4) {
-                    if (data[i] !== 0) { // Alpha channel diferente de 0
+                for (let i = 3; i < pixelData.length; i += 4) {
+                    if (pixelData[i] !== 0) { // Alpha channel diferente de 0
                         hasContent = true;
                         break;
                     }
@@ -993,12 +1004,12 @@
                 submitBtn.textContent = 'Enviando...';
                 
                 const dataUrl = canvas.toDataURL('image/png');
-                const data = new FormData(form);
-                data.append('firma', dataUrl);
+                const formData = new FormData(form);
+                formData.append('firma', dataUrl);
 
                 const scriptURL = 'https://script.google.com/macros/s/AKfycbx8BWMBA-X5rQERw-GxxISXfYYPzdbamSBWGQmHjanwUZkGYCcj6znYNkGSqSbZeOUCVg/exec';
 
-                fetch(scriptURL, { method: 'POST', body: data })
+                fetch(scriptURL, { method: 'POST', body: formData })
                     .then(r => r.text())
                     .then(txt => {
                         // Ocultar loader y restaurar botón
