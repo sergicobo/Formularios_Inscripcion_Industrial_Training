@@ -30,7 +30,11 @@ function doGet(e) {
   template.scriptURL = ScriptApp.getService().getUrl(); // ✅ Inyecta la URL
   return template.evaluate()
     .setTitle('Ficha Inscripción - Industrial Training')
-    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
+    .addMetaTag('viewport', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no')
+    .addMetaTag('apple-mobile-web-app-capable', 'yes')
+    .addMetaTag('mobile-web-app-capable', 'yes')
+    .addMetaTag('apple-mobile-web-app-status-bar-style', 'black-translucent');
 }
 
 
