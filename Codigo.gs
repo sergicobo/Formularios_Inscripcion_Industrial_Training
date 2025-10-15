@@ -7,7 +7,7 @@
  *
  * The script supports:
  *  - doGet: serves the Formulario.html inside Apps Script (so one URL hosts the form)
- *  - doPost: receives form submissions, creates a folder per client inside "Industrial Training",
+ *  - doPost: receives form submissions, creates a folder per client inside "Fichas Inscripción IT",
  *            saves datos.txt, firma.png and generates a PDF with the data and embedded logo.
  *  - logs entries into a Google Sheet (creates one if SHEET_ID left empty)
  *
@@ -20,7 +20,7 @@ const LOGO_FILE_ID = '1wQ62DvlX4-DIwBkPj5Hg9-cpQvhPbcF7'; // ⚙️ Sustituir LO
 // ⚙️ SUSTITUIR: coloca aquí el ID de la Google Sheet donde quieres registrar los envíos (opcional).
 const SHEET_ID = ''; // ⚙️ Sustituir SHEET_ID aquí
 
-const MAIN_FOLDER_NAME = 'Industrial Training' ;
+const MAIN_FOLDER_NAME = 'Fichas Inscripción IT';
 
 /**
  * doGet - sirve el formulario HTML incluido en el proyecto (archivo 'Formulario')
@@ -28,7 +28,7 @@ const MAIN_FOLDER_NAME = 'Industrial Training' ;
 function doGet(e) {
   const template = HtmlService.createTemplateFromFile('formulario');
   template.scriptURL = ScriptApp.getService().getUrl(); // ✅ Inyecta la URL
-  return template.evaluate ()
+  return template.evaluate()
     .setTitle('Ficha Inscripción - Industrial Training')
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 }
@@ -77,7 +77,7 @@ function doPost(e) {
     var imagen = params.imagen || '';
     var pago = params.pago || '';
     var iban = params.iban || '';
-    var conditions = params.conditions || '';
+    var conditions = params.conditions === 'Condiciones' ? 'Aceptado' : (params.conditions || '');
     var fecha_actual = params.fecha_actual || Utilities.formatDate(new Date(), Session.getScriptTimeZone(), "dd/MM/yyyy");
 
     // Carpeta principal
@@ -183,6 +183,7 @@ function doPost(e) {
 
 /**
  * Genera HTML estilizado para el PDF con el diseño de Industrial Training
+ * Optimizado para evitar cortes de texto y adaptarse al tamaño del PDF
  */
 function generateStyledFormHTML(params, firmaUrl) {
   var logoDataUrl = '';
@@ -198,117 +199,180 @@ function generateStyledFormHTML(params, firmaUrl) {
     }
   }
 
+  // Procesar el valor de condiciones
+  var conditionsValue = params.conditions === 'Condiciones' ? 'Aceptado' : (params.conditions || '');
+
   var html = `<!doctype html>
 <html lang="es">
 <head>
     <meta charset="utf-8">
     <title>Ficha de Inscripción - Industrial Training</title>
     <style>
+        @page {
+            size: A4;
+            margin: 15mm 10mm 15mm 10mm;
+        }
+        
         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             background: #E1AA00;
             color: #000000;
-            line-height: 1.4;
+            line-height: 1.3;
+            font-size: 11px;
         }
+        
         .container {
-            max-width: 800px;
-            margin: 0 auto;
+            width: 100%;
             background: #E1AA00;
-            border-radius: 12px;
+            border-radius: 8px;
             overflow: hidden;
         }
+        
         .header {
             background: #000000;
             color: #E1AA00;
             text-align: center;
-            padding: 20px;
-            border-bottom: 4px solid #f3ae00;
+            padding: 12px;
+            border-bottom: 3px solid #f3ae00;
+            margin-bottom: 12px;
         }
+        
         .logo {
-            max-width: 200px;
-            max-height: 100px;
-            margin-bottom: 10px;
+            max-width: 150px;
+            max-height: 60px;
+            margin-bottom: 8px;
         }
+        
         .header h1 {
-            margin: 10px 0 5px 0;
-            font-size: 24px;
+            margin: 8px 0 4px 0;
+            font-size: 18px;
             font-weight: bold;
         }
+        
         .header .subtitle {
             margin: 0;
-            font-size: 16px;
+            font-size: 12px;
             opacity: 0.9;
         }
+        
         .content {
-            padding: 20px;
+            padding: 0 8px;
         }
+        
         .grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
+            gap: 8px;
+            margin-bottom: 12px;
+            width: 100%;
         }
+        
         .full-width {
             grid-column: 1 / -1;
         }
+        
         .field {
             background: #ffffff;
-            padding: 12px;
-            border-radius: 8px;
+            padding: 8px;
+            border-radius: 4px;
             border: 1px solid #d1d5db;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            page-break-inside: avoid;
+            min-height: 32px;
+            display: flex;
+            flex-direction: column;
         }
+        
         .field-label {
             font-weight: bold;
             color: #333333;
-            font-size: 12px;
-            margin-bottom: 5px;
+            font-size: 9px;
+            margin-bottom: 3px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
+            line-height: 1.2;
         }
+        
         .field-value {
             color: #000000;
-            font-size: 14px;
-            min-height: 18px;
+            font-size: 10px;
+            line-height: 1.3;
             word-wrap: break-word;
+            word-break: break-word;
+            hyphens: auto;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
         }
+        
+        .field-value.long-text {
+            font-size: 9px;
+            line-height: 1.2;
+        }
+        
         .signature-section {
             background: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
+            padding: 12px;
+            border-radius: 4px;
             border: 1px solid #d1d5db;
             text-align: center;
-            margin: 20px 0;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin: 8px 0;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            page-break-inside: avoid;
         }
+        
         .signature-image {
-            max-width: 400px;
-            max-height: 150px;
+            max-width: 300px;
+            max-height: 100px;
             border: 1px solid #333;
-            border-radius: 4px;
-            margin-top: 10px;
+            border-radius: 2px;
+            margin-top: 6px;
         }
+        
         .legal-section {
             background: rgba(255,255,255,0.95);
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 11px;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 8px;
             color: #333333;
-            margin-top: 20px;
-            line-height: 1.3;
+            margin-top: 8px;
+            line-height: 1.2;
+            page-break-inside: avoid;
         }
+        
         .legal-section h4 {
-            margin: 0 0 8px 0;
-            font-size: 12px;
+            margin: 0 0 4px 0;
+            font-size: 9px;
             color: #000000;
         }
+        
+        .legal-section p {
+            margin: 4px 0;
+            text-align: justify;
+        }
+        
         .footer {
             text-align: center;
-            margin-top: 20px;
-            font-size: 10px;
+            margin-top: 12px;
+            font-size: 8px;
             color: #555;
+        }
+        
+        /* Especial para campos largos */
+        .field.iban .field-value,
+        .field.cuota .field-value,
+        .field.direccion .field-value {
+            font-size: 9px;
+            line-height: 1.2;
+        }
+        
+        /* Evitar saltos de página problemáticos */
+        .grid,
+        .signature-section,
+        .legal-section {
+            page-break-inside: avoid;
         }
     </style>
 </head>
@@ -327,32 +391,45 @@ function generateStyledFormHTML(params, firmaUrl) {
         <div class="content">
             <div class="grid">`;
 
-  // Función auxiliar para agregar campos
-  function addField(label, value, fullWidth = false) {
+  // Función auxiliar para agregar campos con detección de contenido largo
+  function addField(label, value, fullWidth = false, isLongContent = false) {
     const widthClass = fullWidth ? ' full-width' : '';
+    const specialClass = isLongContent ? ' long-text' : '';
+    const fieldClass = label.toLowerCase().includes('iban') ? ' iban' : 
+                       label.toLowerCase().includes('cuota') ? ' cuota' : 
+                       label.toLowerCase().includes('direc') ? ' direccion' : '';
+    
     html += `
-                <div class="field${widthClass}">
+                <div class="field${widthClass}${fieldClass}">
                     <div class="field-label">${label}</div>
-                    <div class="field-value">${value || '-'}</div>
+                    <div class="field-value${specialClass}">${(value || '-').toString().replace(/\n/g, '<br>')}</div>
                 </div>`;
   }
 
-  // Agregar todos los campos
+  // Agregar todos los campos con optimizaciones específicas
   addField('Nombre', params.nombre || '');
   addField('Apellidos', params.apellidos || '');
   addField('DNI', params.dni || '', true);
   addField('Fecha de Nacimiento', params.fecha_nacimiento || '');
   addField('Teléfono', params.telefono || '');
-  addField('Dirección', (params.direccion || '') + (params.direccion2 ? (' / ' + params.direccion2) : ''), true);
+  
+  // Dirección con manejo especial
+  var direccionCompleta = (params.direccion || '') + (params.direccion2 ? (' / ' + params.direccion2) : '');
+  addField('Dirección', direccionCompleta, true, direccionCompleta.length > 50);
+  
   addField('Ciudad', params.ciudad || '');
   addField('Estado/Provincia', params.estado || '');
   addField('Código Postal', params.cp || '');
   addField('Email', params.email || '');
-  addField('Cuota Seleccionada', params.cuota || '', true);
-  addField('Derechos de Imagen', params.imagen || '', true);
-  addField('Opción de Pago', params.pago || '', true);
-  addField('IBAN', params.iban || '', true);
-  addField('Condiciones', params.conditions || '', true);
+  
+  // Cuota con manejo especial para texto largo
+  addField('Cuota Seleccionada', params.cuota || '', true, true);
+  addField('Derechos de Imagen', params.imagen || '', true, true);
+  addField('Opción de Pago', params.pago || '', true, true);
+  
+  // IBAN con manejo especial
+  addField('IBAN', params.iban || '', true, true);
+  addField('Condiciones', conditionsValue, true);
   addField('Fecha de Inscripción', params.fecha_actual || '', true);
 
   html += `
@@ -369,13 +446,13 @@ function generateStyledFormHTML(params, firmaUrl) {
     html += `
             <div class="signature-section">
                 <div class="field-label">Firma del Cliente</div>
-                <div style="height: 80px; border: 1px dashed #ccc; display: flex; align-items: center; justify-content: center; color: #666; font-style: italic;">
+                <div style="height: 60px; border: 1px dashed #ccc; display: flex; align-items: center; justify-content: center; color: #666; font-style: italic; font-size: 9px;">
                     Firma no proporcionada
                 </div>
             </div>`;
   }
 
-  // Sección legal
+  // Sección legal optimizada
   html += `
             <div class="legal-section">
                 <h4>Información Legal y Condiciones:</h4>
@@ -448,6 +525,9 @@ function logToSheet(params, clienteFolder, datosFile, firmaFile, pdfFile, mainFo
     var datosUrl = datosFile ? datosFile.getUrl() : '';
     var firmaUrlDrive = firmaFile ? firmaFile.getUrl() : '';
     var pdfUrl = pdfFile ? pdfFile.getUrl() : '';
+
+    // Procesar el valor de condiciones para el sheet también
+    var conditionsValue = params.conditions === 'Condiciones' ? 'Aceptado' : (params.conditions || '');
 
     sheet.appendRow([
       new Date(), 
