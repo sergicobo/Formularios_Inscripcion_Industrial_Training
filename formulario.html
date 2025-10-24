@@ -454,7 +454,7 @@
         }
 
         /* Soluciones específicas para Google Apps Script en móviles */
-        
+
         /* Detectar si estamos en un iframe (típico de Apps Script) */
         @media screen and (max-width: 768px) {
             /* Si estamos en móvil, asegurar que el contenido no se desborde */
@@ -464,7 +464,7 @@
                 max-width: 100% !important;
                 overflow-x: hidden !important;
             }
-            
+
             body {
                 position: relative;
                 width: 100% !important;
@@ -472,14 +472,14 @@
                 overflow-x: hidden !important;
                 padding: 8px !important;
             }
-            
+
             .wrap {
                 width: 100% !important;
                 max-width: 100% !important;
                 margin: 0 !important;
                 padding: 0 !important;
             }
-            
+
             .card {
                 width: 100% !important;
                 max-width: 100% !important;
@@ -643,7 +643,7 @@
                 max-width: 100% !important;
                 overflow-x: hidden !important;
             }
-            
+
             .wrap, .card {
                 width: 100% !important;
                 max-width: 100% !important;
@@ -859,7 +859,7 @@
             if (window !== window.top) {
                 document.body.classList.add('gs-mobile');
             }
-            
+
             // Verificar user agent para detectar webviews móviles
             const ua = navigator.userAgent.toLowerCase();
             if (ua.includes('wv') || ua.includes('webview') || window.GoogleAppsScript) {
@@ -874,19 +874,19 @@
             if (existingViewport) {
                 existingViewport.remove();
             }
-            
+
             // Agregar nuevo meta viewport optimizado para Apps Script
             const viewport = document.createElement('meta');
             viewport.name = 'viewport';
             viewport.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover';
             document.head.appendChild(viewport);
-            
+
             // Agregar meta tags adicionales para mejor comportamiento en móviles
             const webAppCapable = document.createElement('meta');
             webAppCapable.name = 'mobile-web-app-capable';
             webAppCapable.content = 'yes';
             document.head.appendChild(webAppCapable);
-            
+
             const appleWebAppCapable = document.createElement('meta');
             appleWebAppCapable.name = 'apple-mobile-web-app-capable';
             appleWebAppCapable.content = 'yes';
@@ -1342,10 +1342,10 @@
             const container = canvas.parentElement;
             const containerWidth = container.offsetWidth;
             const deviceWidth = window.innerWidth || document.documentElement.clientWidth;
-            
+
             // Usar device width si es menor que container width (típico en Apps Script)
             const availableWidth = Math.min(containerWidth - 20, deviceWidth - 40);
-            
+
             if (deviceWidth <= 480) {
                 canvas.width = Math.min(availableWidth, 300);
                 canvas.height = 120;
@@ -1359,7 +1359,7 @@
                 canvas.width = 560;
                 canvas.height = 180;
             }
-            
+
             // Asegurar que el canvas respete el contenedor padre
             if (canvas.width > availableWidth) {
                 canvas.width = availableWidth;
@@ -1367,7 +1367,7 @@
         }
 
         // Inicialización cuando se carga el DOM
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             detectGoogleAppsScript();
             forceResponsiveViewport();
             initBirthDateSelector();
@@ -1375,10 +1375,10 @@
         });
 
         // También ejecutar cuando se carga la ventana como respaldo
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
             detectGoogleAppsScript();
             adjustCanvas();
-            
+
             // Solo ejecutar si no se ha inicializado ya
             const daySelect = document.getElementById('birth_day');
             if (daySelect && daySelect.children.length <= 1) {
@@ -1402,13 +1402,13 @@
                 [lastX, lastY] = getXY(e);
                 ctx.beginPath();
             }
-            
+
             function end(e) {
                 e.preventDefault();
                 drawing = false;
                 ctx.beginPath();
             }
-            
+
             function draw(e) {
                 e.preventDefault();
                 if (!drawing) return;
@@ -1421,7 +1421,7 @@
                 ctx.stroke();
                 [lastX, lastY] = [x, y];
             }
-            
+
             function getXY(e) {
                 const rect = canvas.getBoundingClientRect();
                 if (e.touches && e.touches.length) {
@@ -1440,10 +1440,10 @@
             // Event listeners mejorados para touch y mouse
             canvas.addEventListener('mousedown', start);
             canvas.addEventListener('touchstart', start, { passive: false });
-            
+
             window.addEventListener('mouseup', end);
             canvas.addEventListener('touchend', end, { passive: false });
-            
+
             canvas.addEventListener('mousemove', draw);
             canvas.addEventListener('touchmove', draw, { passive: false });
 
