@@ -60,27 +60,27 @@
             margin-bottom: 16px;
         }
 
-            .header .logo {
-                width: 100%;
-                max-width: 300px;
-                height: auto;
-                max-height: clamp(120px, 20vw, 180px);
-                object-fit: contain;
-                display: block;
-                margin: 0 auto;
-            }
+        .header .logo {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            max-height: clamp(120px, 20vw, 180px);
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+        }
 
-            .header h1 {
-                margin: 0;
-                font-size: clamp(1.2rem, 4vw, 1.8rem);
-                color: var(--industrial);
-            }
+        .header h1 {
+            margin: 0;
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
+            color: var(--industrial);
+        }
 
-            .header .lead {
-                font-size: clamp(0.9rem, 2.5vw, 1rem);
-                color: #555;
-                margin-top: 0.5rem;
-            }
+        .header .lead {
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            color: #555;
+            margin-top: 0.5rem;
+        }
 
         h1 {
             font-size: clamp(1.1rem, 3.5vw, 1.8rem);
@@ -101,17 +101,17 @@
             padding: 0 8px;
         }
 
-            #Inscripcion h1 {
-                font-size: clamp(1.2rem, 4vw, 1.8rem);
-                color: var(--black);
-                margin-bottom: 8px;
-            }
+        #Inscripcion h1 {
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
+            color: var(--black);
+            margin-bottom: 8px;
+        }
 
-            #Inscripcion .lead {
-                font-size: clamp(0.9rem, 2.5vw, 1rem);
-                color: #555;
-                margin-top: 0.5rem;
-            }
+        #Inscripcion .lead {
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            color: #555;
+            margin-top: 0.5rem;
+        }
 
         .grid {
             display: grid;
@@ -129,10 +129,10 @@
             line-height: 1.4;
         }
 
-        input[type="text"], 
-        input[type="email"], 
-        input[type="tel"], 
-        input[type="date"], 
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="date"],
         select {
             width: 100%;
             padding: clamp(8px, 2vw, 12px);
@@ -144,10 +144,10 @@
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
-        input[type="text"]:focus, 
-        input[type="email"]:focus, 
-        input[type="tel"]:focus, 
-        input[type="date"]:focus, 
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus,
+        input[type="date"]:focus,
         select:focus {
             outline: none;
             border-color: var(--accent);
@@ -172,24 +172,24 @@
             align-items: flex-start;
         }
 
-            .radio-group label, .checkbox-group label {
-                font-weight: 400;
-                color: var(--text);
-                font-size: clamp(11px, 2.2vw, 13px);
-                line-height: 1.4;
-                cursor: pointer;
-                display: flex;
-                align-items: flex-start;
-                gap: 8px;
-            }
+        .radio-group label, .checkbox-group label {
+            font-weight: 400;
+            color: var(--text);
+            font-size: clamp(11px, 2.2vw, 13px);
+            line-height: 1.4;
+            cursor: pointer;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
 
-            .radio-group input[type="radio"], 
-            .checkbox-group input[type="checkbox"] {
-                width: auto;
-                margin: 0;
-                flex-shrink: 0;
-                margin-top: 2px;
-            }
+        .radio-group input[type="radio"],
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
 
         .firma-box {
             text-align: center;
@@ -223,22 +223,22 @@
             margin: 0 auto;
         }
 
-            .btn:hover {
-                opacity: 0.9;
-                transform: translateY(-1px);
-            }
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
 
-            .btn:disabled {
-                opacity: 0.5;
-                cursor: not-allowed;
-                transform: none;
-            }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
 
-            .btn.secondary {
-                background: #111827;
-                color: var(--white);
-                margin-top: 8px;
-            }
+        .btn.secondary {
+            background: #111827;
+            color: var(--white);
+            margin-top: 8px;
+        }
 
         /* Selector de fecha personalizado */
         .date-selector {
@@ -285,28 +285,33 @@
             padding: 20px;
         }
 
-            #loader .spinner {
-                border: 6px solid #333;
-                border-top: 6px solid var(--industrial);
-                border-radius: 50%;
-                width: clamp(40px, 8vw, 60px);
-                height: clamp(40px, 8vw, 60px);
-                animation: spin 1s linear infinite;
-                margin-bottom: 20px;
-            }
+        #loader .spinner {
+            border: 6px solid #333;
+            border-top: 6px solid var(--industrial);
+            border-radius: 50%;
+            width: clamp(40px, 8vw, 60px);
+            height: clamp(40px, 8vw, 60px);
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
 
-            #loader .loader-text {
-                color: var(--white);
-                font-size: clamp(0.9rem, 3vw, 1.1rem);
-                font-weight: 600;
-                text-align: center;
-                line-height: 1.4;
-                max-width: 300px;
-            }
+        #loader .loader-text {
+            color: var(--white);
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
+            font-weight: 600;
+            text-align: center;
+            line-height: 1.4;
+            max-width: 300px;
+        }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         /* Mensajes de confirmación y error - Responsive */
@@ -341,6 +346,7 @@
                 transform: translateY(-50px);
                 opacity: 0;
             }
+
             to {
                 transform: translateY(0);
                 opacity: 1;
@@ -389,10 +395,10 @@
             max-width: 200px;
         }
 
-            .message-btn:hover {
-                background: #c99700;
-                transform: translateY(-1px);
-            }
+        .message-btn:hover {
+            background: #c99700;
+            transform: translateY(-1px);
+        }
 
         footer.legal {
             margin-top: 18px;
@@ -523,7 +529,7 @@
                 font-size: 16px; /* Evita zoom en iOS */
             }
 
-            .radio-group input[type="radio"], 
+            .radio-group input[type="radio"],
             .checkbox-group input[type="checkbox"] {
                 min-width: 20px;
                 min-height: 20px;
@@ -555,7 +561,7 @@
             </div>
             <div id="Inscripcion">
                 <h1>Ficha de Inscripción - Industrial Training</h1>
-                <p class="lead">Rellene todos los campos del formulario.</p>
+                <p class="lead">Rellene todos los campos del formulario para completar la inscripción correctamente.</p>
             </div>
 
             <form id="formulario">
@@ -571,7 +577,7 @@
 
                     <div class="full">
                         <label>DNI *</label>
-                        <input name="dni" type="text" required>
+                        <input name="dni" type="text" required placeholder="Ej: 12345678Z" maxlength="9">
                     </div>
 
                     <div>
@@ -603,7 +609,7 @@
                     </div>
                     <div>
                         <label>Teléfono *</label>
-                        <input name="telefono" type="tel" required>
+                        <input name="telefono" type="tel" required placeholder="Ej: 612 345 678 o 91 234 56 78" maxlength="20">
                     </div>
 
                     <div class="full">
@@ -676,7 +682,7 @@
 
                     <div class="full">
                         <label>Número de cuenta IBAN *</label>
-                        <input name="iban" type="text">
+                        <input name="iban" type="text" required placeholder="Ej: ES12 1234 5678 9012 3456 7890" maxlength="34">
                         <p class="muted-small">
                             Autorizo a Industrial Training a gestionar los pagos de mis cuotas mediante domiciliación bancaria conforme a la normativa SEPA (Reglamento UE 260/2012). Declaro que los datos bancarios proporcionados son veraces y autorizo su uso exclusivo para este fin.
                         </p>
@@ -752,6 +758,298 @@
         // Establecer fecha actual
         document.getElementById('fecha_actual').value = new Date().toLocaleDateString('es-ES');
 
+        // Función para validar teléfono español (fijo o móvil)
+        function validatePhone(phone) {
+            // Eliminar espacios, guiones y otros caracteres no numéricos
+            phone = phone.replace(/[\s\-\(\)\.]/g, '');
+
+            // Verificar que solo contenga números y posibles prefijos
+            if (!/^(\+34|0034|34)?[679][0-9]{8}$/.test(phone)) {
+                // Si no coincide con móvil, verificar si es fijo
+                if (!/^(\+34|0034|34)?[89][0-9]{8}$/.test(phone)) {
+                    return {
+                        valid: false,
+                        error: 'Formato de teléfono incorrecto. Debe ser un móvil (6xx, 7xx, 9xx) o fijo (8xx, 9xx) válido'
+                    };
+                }
+            }
+
+            // Extraer solo los dígitos principales (sin prefijo)
+            let cleanPhone = phone;
+            if (phone.startsWith('+34')) {
+                cleanPhone = phone.substring(3);
+            } else if (phone.startsWith('0034')) {
+                cleanPhone = phone.substring(4);
+            } else if (phone.startsWith('34')) {
+                cleanPhone = phone.substring(2);
+            }
+
+            // Verificar longitud (debe ser 9 dígitos)
+            if (cleanPhone.length !== 9) {
+                return {
+                    valid: false,
+                    error: 'El número de teléfono debe tener 9 dígitos'
+                };
+            }
+
+            // Validar números móviles (6xx, 7xx, 9xx)
+            if (cleanPhone.startsWith('6') || cleanPhone.startsWith('7')) {
+                if (cleanPhone.length === 9) {
+                    return { valid: true, type: 'móvil' };
+                }
+            }
+
+            // Validar números fijos (8xx, 9xx pero no móviles)
+            if (cleanPhone.startsWith('8') || (cleanPhone.startsWith('9') && !cleanPhone.startsWith('6') && !cleanPhone.startsWith('7'))) {
+                if (cleanPhone.length === 9) {
+                    return { valid: true, type: 'fijo' };
+                }
+            }
+
+            // Validar números móviles que empiecen por 9xx (algunos rangos específicos)
+            if (cleanPhone.startsWith('9')) {
+                // Rangos móviles específicos que empiezan por 9
+                const mobileRanges = ['900', '901', '902', '905', '906', '907'];
+                const prefix = cleanPhone.substring(0, 3);
+                if (mobileRanges.includes(prefix)) {
+                    return { valid: true, type: 'móvil' };
+                } else {
+                    return { valid: true, type: 'fijo' };
+                }
+            }
+
+            return {
+                valid: false,
+                error: 'Número de teléfono no válido. Debe comenzar por 6, 7, 8 o 9'
+            };
+        }
+
+        // Función para formatear teléfono automáticamente
+        function formatPhone(phone) {
+            // Eliminar caracteres no numéricos excepto el +
+            let cleaned = phone.replace(/[^\d\+]/g, '');
+
+            // Si empieza con +34, mantenerlo
+            if (cleaned.startsWith('+34')) {
+                let numbers = cleaned.substring(3);
+                if (numbers.length <= 9) {
+                    return '+34 ' + numbers.replace(/(\d{3})(\d{3})(\d{3})/, '$1 $2 $3').trim();
+                }
+            }
+            // Si empieza con 0034, convertir a +34
+            else if (cleaned.startsWith('0034')) {
+                let numbers = cleaned.substring(4);
+                if (numbers.length <= 9) {
+                    return '+34 ' + numbers.replace(/(\d{3})(\d{3})(\d{3})/, '$1 $2 $3').trim();
+                }
+            }
+            // Si empieza con 34 (sin +), convertir a +34
+            else if (cleaned.startsWith('34') && cleaned.length > 2) {
+                let numbers = cleaned.substring(2);
+                if (numbers.length <= 9) {
+                    return '+34 ' + numbers.replace(/(\d{3})(\d{3})(\d{3})/, '$1 $2 $3').trim();
+                }
+            }
+            // Si es un número español directo (9 dígitos)
+            else if (cleaned.length <= 9) {
+                return cleaned.replace(/(\d{3})(\d{3})(\d{3})/, '$1 $2 $3').trim();
+            }
+
+            return cleaned;
+        }
+
+        // Función para validar DNI español
+        function validateDNI(dni) {
+            // Eliminar espacios y convertir a mayúsculas
+            dni = dni.replace(/\s/g, '').toUpperCase();
+
+            // Verificar formato: 8 dígitos seguidos de una letra
+            const dniRegex = /^[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKE]$/;
+            if (!dniRegex.test(dni)) {
+                return {
+                    valid: false,
+                    error: 'El DNI debe tener 8 dígitos seguidos de una letra (ej: 12345678Z)'
+                };
+            }
+
+            // Extraer número y letra
+            const number = parseInt(dni.substring(0, 8));
+            const letter = dni.charAt(8);
+
+            // Letras válidas para el cálculo del DNI
+            const validLetters = 'TRWAGMYFPDXBNJZSQVHLCKE';
+            const expectedLetter = validLetters[number % 23];
+
+            if (letter !== expectedLetter) {
+                return {
+                    valid: false,
+                    error: `La letra del DNI no es correcta. Para el número ${number}, la letra debería ser "${expectedLetter}"`
+                };
+            }
+
+            return { valid: true };
+        }
+
+        // Función para validar IBAN
+        function validateIBAN(iban) {
+            // Eliminar espacios y convertir a mayúsculas
+            iban = iban.replace(/\s/g, '').toUpperCase();
+
+            // Verificar longitud mínima
+            if (iban.length < 15) {
+                return {
+                    valid: false,
+                    error: 'El IBAN es demasiado corto. Debe tener al menos 15 caracteres'
+                };
+            }
+
+            // Verificar longitud máxima
+            if (iban.length > 34) {
+                return {
+                    valid: false,
+                    error: 'El IBAN es demasiado largo. No puede tener más de 34 caracteres'
+                };
+            }
+
+            // Verificar formato básico (2 letras + 2 dígitos + alfanumérico)
+            const ibanRegex = /^[A-Z]{2}[0-9]{2}[A-Z0-9]+$/;
+            if (!ibanRegex.test(iban)) {
+                return {
+                    valid: false,
+                    error: 'Formato de IBAN incorrecto. Debe comenzar con 2 letras del país, seguidas de 2 dígitos de control y los dígitos de cuenta'
+                };
+            }
+
+            // Validación específica para España (ES)
+            if (iban.startsWith('ES')) {
+                if (iban.length !== 24) {
+                    return {
+                        valid: false,
+                        error: 'Para cuentas españolas, el IBAN debe tener exactamente 24 caracteres (ej: ES12 1234 5678 9012 3456 7890)'
+                    };
+                }
+            }
+
+            // Algoritmo de validación IBAN
+            function mod97(str) {
+                let remainder = '';
+                for (let i = 0; i < str.length; i++) {
+                    remainder = (remainder + str.charAt(i));
+                    if (remainder.length >= 9) {
+                        remainder = (parseInt(remainder) % 97).toString();
+                    }
+                }
+
+                return parseInt(remainder) % 97;
+            }
+
+            // Mover los primeros 4 caracteres al final
+            const rearranged = iban.substring(4) + iban.substring(0, 4);
+
+            // Convertir letras a números (A=10, B=11, ..., Z=35)
+            let numericString = '';
+            for (let i = 0; i < rearranged.length; i++) {
+                const char = rearranged.charAt(i);
+                if (char >= 'A' && char <= 'Z') {
+                    numericString += (char.charCodeAt(0) - 'A'.charCodeAt(0) + 10).toString();
+                } else {
+                    numericString += char;
+                }
+            }
+
+            // Verificar que el resto de la división entre 97 es 1
+            const checkResult = mod97(numericString);
+            if (checkResult !== 1) {
+                return {
+                    valid: false,
+                    error: 'El número IBAN no es válido. Los dígitos de control no coinciden. Verifique que ha introducido correctamente todos los números'
+                };
+            }
+
+            return { valid: true };
+        }
+
+        // Agregar validaciones en tiempo real
+        function setupValidations() {
+            const dniInput = document.querySelector('input[name="dni"]');
+            const ibanInput = document.querySelector('input[name="iban"]');
+            const phoneInput = document.querySelector('input[name="telefono"]');
+
+            // Validación DNI en tiempo real
+            if (dniInput) {
+                // Formatear DNI automáticamente
+                dniInput.addEventListener('input', function () {
+                    let value = this.value.replace(/[^0-9a-zA-Z]/g, '').toUpperCase();
+                    if (value.length > 9) value = value.substring(0, 9);
+                    this.value = value;
+                    this.setCustomValidity('');
+                });
+
+                dniInput.addEventListener('blur', function () {
+                    const dniValue = this.value.trim();
+                    if (dniValue) {
+                        const validation = validateDNI(dniValue);
+                        if (!validation.valid) {
+                            this.setCustomValidity(validation.error);
+                        } else {
+                            this.setCustomValidity('');
+                        }
+                    }
+                });
+            }
+
+            // Validación teléfono en tiempo real
+            if (phoneInput) {
+                // Formatear teléfono automáticamente
+                phoneInput.addEventListener('input', function () {
+                    const formatted = formatPhone(this.value);
+                    this.value = formatted;
+                    this.setCustomValidity('');
+                });
+
+                phoneInput.addEventListener('blur', function () {
+                    const phoneValue = this.value.trim();
+                    if (phoneValue) {
+                        const validation = validatePhone(phoneValue);
+                        if (!validation.valid) {
+                            this.setCustomValidity(validation.error);
+                        } else {
+                            this.setCustomValidity('');
+                        }
+                    }
+                });
+            }
+
+            // Validación IBAN en tiempo real
+            if (ibanInput) {
+                // Formatear IBAN automáticamente (agregar espacios cada 4 caracteres)
+                ibanInput.addEventListener('input', function () {
+                    let value = this.value.replace(/[^0-9a-zA-Z]/g, '').toUpperCase();
+                    let formatted = '';
+                    for (let i = 0; i < value.length; i++) {
+                        if (i > 0 && i % 4 === 0) {
+                            formatted += ' ';
+                        }
+                        formatted += value[i];
+                    }
+                    this.value = formatted;
+                    this.setCustomValidity('');
+                });
+
+                ibanInput.addEventListener('blur', function () {
+                    const ibanValue = this.value.trim();
+                    if (ibanValue) {
+                        const validation = validateIBAN(ibanValue);
+                        if (!validation.valid) {
+                            this.setCustomValidity(validation.error);
+                        } else {
+                            this.setCustomValidity('');
+                        }
+                    }
+                });
+            }
+        }
+
         // Inicializar selector de fecha de nacimiento
         function initBirthDateSelector() {
             const daySelect = document.getElementById('birth_day');
@@ -767,7 +1065,7 @@
                 daySelect.appendChild(option);
             }
 
-            // Poblar años (desde 1930 hasta año actual)
+            // Poblar años (desde 1930 hasta año currentYear)
             const currentYear = new Date().getFullYear();
             for (let year = currentYear; year >= 1930; year--) {
                 const option = document.createElement('option');
@@ -785,8 +1083,8 @@
                 if (day && month && year) {
                     // Validar que la fecha sea válida
                     const date = new Date(year, parseInt(month) - 1, parseInt(day));
-                    if (date.getFullYear() == year && 
-                        date.getMonth() == parseInt(month) - 1 && 
+                    if (date.getFullYear() == year &&
+                        date.getMonth() == parseInt(month) - 1 &&
                         date.getDate() == parseInt(day)) {
                         hiddenInput.value = `${year}-${month}-${day}`;
                         hiddenInput.setCustomValidity('');
@@ -812,7 +1110,7 @@
                 if (month && year) {
                     // Calcular días del mes
                     const daysInMonth = new Date(year, month, 0).getDate();
-                    
+
                     for (let i = 1; i <= daysInMonth; i++) {
                         const option = document.createElement('option');
                         option.value = i.toString().padStart(2, '0');
@@ -854,17 +1152,19 @@
         }
 
         // Inicializar selector cuando se carga la página
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             initBirthDateSelector();
+            setupValidations();
         });
 
         // También ejecutar cuando se carga la ventana como respaldo
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
             // Solo ejecutar si no se ha inicializado ya
             const daySelect = document.getElementById('birth_day');
             if (daySelect && daySelect.children.length <= 1) {
                 initBirthDateSelector();
             }
+            setupValidations();
         });
 
         // Funciones para manejar mensajes
@@ -888,6 +1188,13 @@
                 document.getElementById('birth_month').selectedIndex = 0;
                 document.getElementById('birth_year').selectedIndex = 0;
                 document.getElementById('fecha_nacimiento_hidden').value = '';
+                // Limpiar validaciones personalizadas
+                const dniInput = document.querySelector('input[name="dni"]');
+                const ibanInput = document.querySelector('input[name="iban"]');
+                const phoneInput = document.querySelector('input[name="telefono"]');
+                if (dniInput) dniInput.setCustomValidity('');
+                if (ibanInput) ibanInput.setCustomValidity('');
+                if (phoneInput) phoneInput.setCustomValidity('');
             }
         }
 
@@ -896,7 +1203,7 @@
             const canvas = document.getElementById('firma');
             const container = canvas.parentElement;
             const containerWidth = container.offsetWidth;
-            
+
             if (window.innerWidth <= 480) {
                 canvas.width = Math.min(containerWidth - 20, 320);
                 canvas.height = 120;
@@ -959,8 +1266,8 @@
             canvas.addEventListener('mousemove', draw);
             canvas.addEventListener('touchmove', function (e) { e.preventDefault(); draw(e); }, { passive: false });
 
-            document.getElementById('borrar').addEventListener('click', function () { 
-                ctx.clearRect(0, 0, canvas.width, canvas.height); 
+            document.getElementById('borrar').addEventListener('click', function () {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
             });
 
             // Manejo del envío del formulario
@@ -970,16 +1277,68 @@
 
             form.addEventListener('submit', function (e) {
                 e.preventDefault();
-                
+
+                // Validaciones personalizadas antes del envío
+                const dniInput = document.querySelector('input[name="dni"]');
+                const ibanInput = document.querySelector('input[name="iban"]');
+                const phoneInput = document.querySelector('input[name="telefono"]');
+
+                // Validar DNI
+                if (dniInput && dniInput.value.trim()) {
+                    const dniValidation = validateDNI(dniInput.value.trim());
+                    if (!dniValidation.valid) {
+                        document.getElementById('errorText').innerHTML =
+                            '<strong>DNI Incorrecto:</strong><br>' +
+                            dniValidation.error + '<br><br>' +
+                            'Por favor, revise el DNI introducido y asegúrese de que sea válido.';
+                        showMessage('errorMessage');
+                        return;
+                    }
+                }
+
+                // Validar teléfono
+                if (phoneInput && phoneInput.value.trim()) {
+                    const phoneValidation = validatePhone(phoneInput.value.trim());
+                    if (!phoneValidation.valid) {
+                        document.getElementById('errorText').innerHTML =
+                            '<strong>Teléfono Incorrecto:</strong><br>' +
+                            phoneValidation.error + '<br><br>' +
+                            'Por favor, introduzca un número de teléfono válido (móvil o fijo).';
+                        showMessage('errorMessage');
+                        return;
+                    }
+                }
+
+                // Validar IBAN (siempre obligatorio)
+                if (!ibanInput || !ibanInput.value.trim()) {
+                    document.getElementById('errorText').innerHTML =
+                        '<strong>IBAN Requerido:</strong><br>' +
+                        'El número de cuenta IBAN es obligatorio independientemente del método de pago seleccionado.<br><br>' +
+                        'Según las condiciones de la empresa, si no se recibe el pago por el método seleccionado, se realizará el cobro automáticamente por domiciliación bancaria.';
+                    showMessage('errorMessage');
+                    return;
+                }
+
+                const ibanValidation = validateIBAN(ibanInput.value.trim());
+                if (!ibanValidation.valid) {
+                    document.getElementById('errorText').innerHTML =
+                        '<strong>IBAN Incorrecto:</strong><br>' +
+                        ibanValidation.error + '<br><br>' +
+                        'Por favor, revise el número IBAN introducido. Asegúrese de incluir el código del país y todos los dígitos.';
+                    showMessage('errorMessage');
+                    return;
+                }
+
                 // Validar que la firma esté presente
                 const canvas = document.getElementById('firma');
                 const ctx = canvas.getContext('2d');
-                
+
                 // Verificar si el canvas tiene contenido (no está en blanco)
                 const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                 const pixelData = imageData.data;
                 let hasContent = false;
-                
+
+
                 // Revisar si hay algún pixel que no sea transparente
                 for (let i = 3; i < pixelData.length; i += 4) {
                     if (pixelData[i] !== 0) { // Alpha channel diferente de 0
@@ -987,22 +1346,22 @@
                         break;
                     }
                 }
-                
+
                 if (!hasContent) {
                     // Mostrar error si no hay firma
-                    document.getElementById('errorText').innerHTML = 
+                    document.getElementById('errorText').innerHTML =
                         '<strong>Firma requerida:</strong><br>' +
                         'Por favor, firme en el recuadro antes de enviar el formulario.<br><br>' +
                         'La firma es obligatoria para completar la inscripción.';
                     showMessage('errorMessage');
                     return;
                 }
-                
+
                 // Mostrar loader y deshabilitar botón
                 loader.style.display = 'flex';
                 submitBtn.disabled = true;
                 submitBtn.textContent = 'Enviando...';
-                
+
                 const dataUrl = canvas.toDataURL('image/png');
                 const formData = new FormData(form);
                 formData.append('firma', dataUrl);
@@ -1016,14 +1375,14 @@
                         loader.style.display = 'none';
                         submitBtn.disabled = false;
                         submitBtn.textContent = 'Enviar inscripción';
-                        
+
                         if (txt && txt.startsWith('OK')) {
                             showMessage('successMessage');
                         } else {
                             // Mostrar error con detalles
-                            document.getElementById('errorText').innerHTML = 
+                            document.getElementById('errorText').innerHTML =
                                 'Ha ocurrido un problema al procesar su inscripción.<br>' +
-                                '<strong>Detalles del error:</strong><br>' + 
+                                '<strong>Detalles del error:</strong><br>' +
                                 (txt || 'Error desconocido') + '<br><br>' +
                                 'Por favor, revise los datos e inténtelo nuevamente.';
                             showMessage('errorMessage');
@@ -1034,9 +1393,9 @@
                         loader.style.display = 'none';
                         submitBtn.disabled = false;
                         submitBtn.textContent = 'Enviar inscripción';
-                        
+
                         // Mostrar error de conexión
-                        document.getElementById('errorText').innerHTML = 
+                        document.getElementById('errorText').innerHTML =
                             'Error de conexión al enviar el formulario.<br>' +
                             '<strong>Detalles:</strong><br>' + err.message + '<br><br>' +
                             'Por favor, verifique su conexión a internet e inténtelo nuevamente.';
