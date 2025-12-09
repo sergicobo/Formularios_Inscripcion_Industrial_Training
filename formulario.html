@@ -54,12 +54,12 @@
             overscroll-behavior: contain;
         }
 
-            /* Solución específica para contenedores de Google Apps Script */
-            body.gs-mobile {
-                width: 100% !important;
-                max-width: 100% !important;
-                min-width: 100% !important;
-            }
+        /* Solución específica para contenedores de Google Apps Script */
+        body.gs-mobile {
+            width: 100% !important;
+            max-width: 100% !important;
+            min-width: 100% !important;
+        }
 
         .wrap {
             max-width: 820px;
@@ -94,27 +94,27 @@
             margin-bottom: 16px;
         }
 
-            .header .logo {
-                width: 100%;
-                max-width: 300px;
-                height: auto;
-                max-height: clamp(120px, 20vw, 180px);
-                object-fit: contain;
-                display: block;
-                margin: 0 auto;
-            }
+        .header .logo {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            max-height: clamp(120px, 20vw, 180px);
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+        }
 
-            .header h1 {
-                margin: 0;
-                font-size: clamp(1.2rem, 4vw, 1.8rem);
-                color: var(--industrial);
-            }
+        .header h1 {
+            margin: 0;
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
+            color: var(--industrial);
+        }
 
-            .header .lead {
-                font-size: clamp(0.9rem, 2.5vw, 1rem);
-                color: #555;
-                margin-top: 0.5rem;
-            }
+        .header .lead {
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            color: #555;
+            margin-top: 0.5rem;
+        }
 
         h1 {
             font-size: clamp(1.1rem, 3.5vw, 1.8rem);
@@ -135,17 +135,17 @@
             padding: 0 8px;
         }
 
-            #Inscripcion h1 {
-                font-size: clamp(1.2rem, 4vw, 1.8rem);
-                color: var(--black);
-                margin-bottom: 8px;
-            }
+        #Inscripcion h1 {
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
+            color: var(--black);
+            margin-bottom: 8px;
+        }
 
-            #Inscripcion .lead {
-                font-size: clamp(0.9rem, 2.5vw, 1rem);
-                color: #555;
-                margin-top: 0.5rem;
-            }
+        #Inscripcion .lead {
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            color: #555;
+            margin-top: 0.5rem;
+        }
 
         .grid {
             display: grid;
@@ -181,15 +181,15 @@
             box-sizing: border-box;
         }
 
-            input[type="text"]:focus,
-            input[type="email"]:focus,
-            input[type="tel"]:focus,
-            input[type="date"]:focus,
-            select:focus {
-                outline: none;
-                border-color: var(--accent);
-                box-shadow: 0 0 0 3px rgba(243, 174, 0, 0.1);
-            }
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus,
+        input[type="date"]:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(243, 174, 0, 0.1);
+        }
 
         .full {
             grid-column: 1 / -1;
@@ -209,24 +209,24 @@
             align-items: flex-start;
         }
 
-            .radio-group label, .checkbox-group label {
-                font-weight: 400;
-                color: var(--text);
-                font-size: clamp(11px, 2.2vw, 13px);
-                line-height: 1.4;
-                cursor: pointer;
-                display: flex;
-                align-items: flex-start;
-                gap: 8px;
-            }
+        .radio-group label, .checkbox-group label {
+            font-weight: 400;
+            color: var(--text);
+            font-size: clamp(11px, 2.2vw, 13px);
+            line-height: 1.4;
+            cursor: pointer;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
 
-            .radio-group input[type="radio"],
-            .checkbox-group input[type="checkbox"] {
-                width: auto;
-                margin: 0;
-                flex-shrink: 0;
-                margin-top: 2px;
-            }
+        .radio-group input[type="radio"],
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
 
         .firma-box {
             text-align: center;
@@ -262,22 +262,22 @@
             margin: 0 auto;
         }
 
-            .btn:hover {
-                opacity: 0.9;
-                transform: translateY(-1px);
-            }
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
 
-            .btn:disabled {
-                opacity: 0.5;
-                cursor: not-allowed;
-                transform: none;
-            }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
 
-            .btn.secondary {
-                background: #111827;
-                color: var(--white);
-                margin-top: 8px;
-            }
+        .btn.secondary {
+            background: #111827;
+            color: var(--white);
+            margin-top: 8px;
+        }
 
         /* Selector de fecha personalizado */
         .date-selector {
@@ -286,22 +286,22 @@
             width: 100%;
         }
 
-            .date-selector select {
-                flex: 1;
-                min-width: 0;
-            }
+        .date-selector select {
+            flex: 1;
+            min-width: 0;
+        }
 
-            .date-selector .day-select {
-                flex: 0.8;
-            }
+        .date-selector .day-select {
+            flex: 0.8;
+        }
 
-            .date-selector .month-select {
-                flex: 1.2;
-            }
+        .date-selector .month-select {
+            flex: 1.2;
+        }
 
-            .date-selector .year-select {
-                flex: 1;
-            }
+        .date-selector .year-select {
+            flex: 1;
+        }
 
         /* Hidden input for form submission */
         #fecha_nacimiento_hidden {
@@ -324,24 +324,24 @@
             padding: 20px;
         }
 
-            #loader .spinner {
-                border: 6px solid #333;
-                border-top: 6px solid var(--industrial);
-                border-radius: 50%;
-                width: clamp(40px, 8vw, 60px);
-                height: clamp(40px, 8vw, 60px);
-                animation: spin 1s linear infinite;
-                margin-bottom: 20px;
-            }
+        #loader .spinner {
+            border: 6px solid #333;
+            border-top: 6px solid var(--industrial);
+            border-radius: 50%;
+            width: clamp(40px, 8vw, 60px);
+            height: clamp(40px, 8vw, 60px);
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
 
-            #loader .loader-text {
-                color: var(--white);
-                font-size: clamp(0.9rem, 3vw, 1.1rem);
-                font-weight: 600;
-                text-align: center;
-                line-height: 1.4;
-                max-width: 300px;
-            }
+        #loader .loader-text {
+            color: var(--white);
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
+            font-weight: 600;
+            text-align: center;
+            line-height: 1.4;
+            max-width: 300px;
+        }
 
         @keyframes spin {
             0% {
@@ -434,10 +434,10 @@
             max-width: 200px;
         }
 
-            .message-btn:hover {
-                background: #c99700;
-                transform: translateY(-1px);
-            }
+        .message-btn:hover {
+            background: #c99700;
+            transform: translateY(-1px);
+        }
 
         footer.legal {
             margin-top: 18px;
@@ -523,10 +523,10 @@
                 gap: 8px;
             }
 
-                .radio-group label, .checkbox-group label {
-                    font-size: 12px;
-                    margin-bottom: 8px;
-                }
+            .radio-group label, .checkbox-group label {
+                font-size: 12px;
+                margin-bottom: 8px;
+            }
 
             .btn {
                 padding: 12px 16px;
@@ -545,9 +545,9 @@
                 gap: 8px;
             }
 
-                .date-selector select {
-                    flex: none;
-                }
+            .date-selector select {
+                flex: none;
+            }
         }
 
         @media (min-width: 481px) and (max-width: 768px) {
@@ -1676,7 +1676,6 @@
                 const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                 const pixelData = imageData.data;
                 let hasContent = false;
-
 
                 // Revisar si hay algún pixel que no sea transparente
                 for (let i = 3; i < pixelData.length; i += 4) {
