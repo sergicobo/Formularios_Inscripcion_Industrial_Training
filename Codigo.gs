@@ -210,29 +210,21 @@ function generateStyledFormHTML(params, firmaUrl, isKidsSubscription, parentName
 
   // Obtener el logo desde Google Drive con diagnóstico completo
   if (LOGO_FILE_ID && LOGO_FILE_ID.length > 3) {
-    try {
-      Logger.log('=== DIAGNÓSTICO DEL LOGO ===');
-      Logger.log('1. LOGO_FILE_ID: ' + LOGO_FILE_ID);
-      
+    try {      
       // Verificar que el archivo existe y es accesible
       var logoFile = DriveApp.getFileById(LOGO_FILE_ID);
-      Logger.log('2. Archivo encontrado: ' + logoFile.getName());
       
       // Obtener información del archivo
       var fileSize = logoFile.getSize();
       var mimeType = logoFile.getBlob().getContentType();
-      Logger.log('3. Tamaño del archivo: ' + fileSize + ' bytes');
-      Logger.log('4. Tipo MIME: ' + mimeType);
       
       // Verificar que es una imagen
       if (!mimeType || !mimeType.startsWith('image/')) {
-        Logger.log('ERROR: El archivo no es una imagen válida. MIME: ' + mimeType);
         return logoDataUrl; // Salir sin procesar
       }
       
       // Verificar tamaño razonable (menos de 5MB)
       if (fileSize > 5 * 1024 * 1024) {
-        Logger.log('ERROR: El archivo es demasiado grande: ' + fileSize + ' bytes');
         return logoDataUrl; // Salir sin procesar
       }
       
@@ -240,17 +232,9 @@ function generateStyledFormHTML(params, firmaUrl, isKidsSubscription, parentName
       var logoBlob = logoFile.getBlob();
       var base64Data = Utilities.base64Encode(logoBlob.getBytes());
       
-      Logger.log('5. Conversión Base64 - Longitud: ' + base64Data.length);
-      
       // Crear la URL de datos
       logoDataUrl = 'data:' + mimeType + ';base64,' + base64Data;
-      
-      // Verificar la URL resultante (mostrar solo el inicio)
-      Logger.log('6. URL datos creada (primeros 100 chars): ' + logoDataUrl.substring(0, 100) + '...');
-      Logger.log('7. URL completa - Longitud total: ' + logoDataUrl.length);
-      
-      Logger.log('✅ Logo cargado correctamente');
-      
+
     } catch (err) {
       Logger.log('❌ ERROR cargando logo:');
       Logger.log('- Mensaje: ' + err.toString());
