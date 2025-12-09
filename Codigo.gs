@@ -15,7 +15,7 @@
  */
 
  // ⚙️ SUSTITUIR: coloca aquí el File ID de tu logo (opcional). Deja vacío '' si no quieres logo en PDF.
-const LOGO_FILE_ID = '1wQ62DvlX4-DIwBkPj5Hg9-cpQvhPbcF7'; // ⚙️ Sustituir LOGO_FILE_ID aquí
+const LOGO_FILE_ID = '1Pv5Vw64Qjv_4XF_ASWSn7kt4yFTc5k14'; // ⚙️ Reemplaza con el ID del archivo PNG específico
 
 // ⚙️ SUSTITUIR: coloca aquí el ID de la Google Sheet donde quieres registrar los envíos (opcional).
 const SHEET_ID = ''; // ⚙️ Sustituir SHEET_ID aquí
@@ -89,6 +89,11 @@ function doPost(e) {
     var iban = params.iban || '';
     var conditions = params.conditions === 'Condiciones' ? 'Aceptado' : (params.conditions || '');
     var fecha_actual = params.fecha_actual || Utilities.formatDate(new Date(), Session.getScriptTimeZone(), "dd/MM/yyyy");
+    
+    // Datos específicos para KIDS (autorización de menor)
+    var parent_name = params.parent_name || '';
+    var parent_dni = params.parent_dni || '';
+    var isKidsSubscription = cuota && cuota.startsWith('KIDS');
 
     // Función para formatear fecha de ISO (YYYY-MM-DD) a DD/MM/YYYY
     function formatDateToDDMMYYYY(isoDate) {
@@ -147,6 +152,15 @@ function doPost(e) {
       'Condiciones aceptadas: ' + conditions + '\n' +
       'Fecha (envío): ' + fecha_actual + '\n';
     
+    // Añadir información del tutor si es suscripción KIDS
+    if (isKidsSubscription && parent_name && parent_dni) {
+      contenido += '\n--- AUTORIZACIÓN DE MENOR ---\n' +
+                   'Tutor/Padre/Madre: ' + parent_name + '\n' +
+                   'DNI del tutor: ' + parent_dni + '\n' +
+                   'Menor autorizado: ' + nombre + ' ' + apellidos + '\n' +
+                   'Fecha nacimiento menor: ' + fechaNacimientoFormateada + '\n';
+    }
+    
     var datosFile;
     try {
       datosFile = clienteFolder.createFile('datos.txt', contenido, MimeType.PLAIN_TEXT);
@@ -156,7 +170,7 @@ function doPost(e) {
     }
 
     // Generar HTML mejorado para PDF con el estilo de Industrial Training
-    var html = generateStyledFormHTML(params, firmaUrl);
+    var html = generateStyledFormHTML(params, firmaUrl, isKidsSubscription, parent_name, parent_dni);
 
     // Convertir a PDF
     var pdfFile;
@@ -188,19 +202,70 @@ function doPost(e) {
 /**
  * Genera HTML estilizado para el PDF con el diseño de Industrial Training
  * Optimizado para una sola página con textos máximos y separación óptima
+ * Para suscripciones KIDS genera una segunda página con autorización
  */
-function generateStyledFormHTML(params, firmaUrl) {
-  var logoDataUrl = '';
+function generateStyledFormHTML(params, firmaUrl, isKidsSubscription, parentName, parentDni) {
+    var logoDataUrl = '';
   
-  // Intentar obtener el logo
+
+  // Obtener el logo desde Google Drive con diagnóstico completo
   if (LOGO_FILE_ID && LOGO_FILE_ID.length > 3) {
     try {
+      Logger.log('=== DIAGNÓSTICO DEL LOGO ===');
+      Logger.log('1. LOGO_FILE_ID: ' + LOGO_FILE_ID);
+      
+      // Verificar que el archivo existe y es accesible
       var logoFile = DriveApp.getFileById(LOGO_FILE_ID);
+      Logger.log('2. Archivo encontrado: ' + logoFile.getName());
+      
+      // Obtener información del archivo
+      var fileSize = logoFile.getSize();
+      var mimeType = logoFile.getBlob().getContentType();
+      Logger.log('3. Tamaño del archivo: ' + fileSize + ' bytes');
+      Logger.log('4. Tipo MIME: ' + mimeType);
+      
+      // Verificar que es una imagen
+      if (!mimeType || !mimeType.startsWith('image/')) {
+        Logger.log('ERROR: El archivo no es una imagen válida. MIME: ' + mimeType);
+        return logoDataUrl; // Salir sin procesar
+      }
+      
+      // Verificar tamaño razonable (menos de 5MB)
+      if (fileSize > 5 * 1024 * 1024) {
+        Logger.log('ERROR: El archivo es demasiado grande: ' + fileSize + ' bytes');
+        return logoDataUrl; // Salir sin procesar
+      }
+      
+      // Obtener el blob y convertir
       var logoBlob = logoFile.getBlob();
-      logoDataUrl = 'data:' + logoBlob.getContentType() + ';base64,' + Utilities.base64Encode(logoBlob.getBytes());
+      var base64Data = Utilities.base64Encode(logoBlob.getBytes());
+      
+      Logger.log('5. Conversión Base64 - Longitud: ' + base64Data.length);
+      
+      // Crear la URL de datos
+      logoDataUrl = 'data:' + mimeType + ';base64,' + base64Data;
+      
+      // Verificar la URL resultante (mostrar solo el inicio)
+      Logger.log('6. URL datos creada (primeros 100 chars): ' + logoDataUrl.substring(0, 100) + '...');
+      Logger.log('7. URL completa - Longitud total: ' + logoDataUrl.length);
+      
+      Logger.log('✅ Logo cargado correctamente');
+      
     } catch (err) {
-      Logger.log('Warning: No se pudo cargar el logo: ' + err.toString());
+      Logger.log('❌ ERROR cargando logo:');
+      Logger.log('- Mensaje: ' + err.toString());
+      Logger.log('- Código: ' + (err.name || 'Unknown'));
+      Logger.log('- Stack: ' + (err.stack || 'No stack trace'));
+      
+      // Verificar errores comunes
+      if (err.toString().includes('not found')) {
+        Logger.log('💡 SOLUCIÓN: Verifica que el ID del archivo sea correcto');
+      } else if (err.toString().includes('permission')) {
+        Logger.log('💡 SOLUCIÓN: Comparte el archivo públicamente (Cualquiera con el enlace)');
+      }
     }
+  } else {
+    Logger.log('⚠️ LOGO_FILE_ID no válido o vacío: "' + LOGO_FILE_ID + '"');
   }
 
   // Procesar el valor de condiciones
@@ -246,6 +311,11 @@ function generateStyledFormHTML(params, firmaUrl) {
             background: #E1AA00;
             border-radius: 6px;
             overflow: hidden;
+            page-break-after: avoid;
+        }
+        
+        .page-break {
+            page-break-before: always;
         }
         
         .header {
@@ -368,6 +438,57 @@ function generateStyledFormHTML(params, firmaUrl) {
             page-break-inside: avoid;
         }
         
+        /* Estilos específicos para página de autorización KIDS */
+        .kids-authorization {
+            background: #ffffff;
+            padding: 15px;
+            border-radius: 6px;
+            border: 2px solid #E1AA00;
+            margin: 10px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .kids-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #E1AA00;
+            text-align: center;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .kids-text {
+            font-size: 13px;
+            line-height: 1.5;
+            color: #333333;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        .kids-data {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 4px;
+            border-left: 4px solid #E1AA00;
+            margin: 10px 0;
+        }
+        
+        .kids-data-label {
+            font-weight: bold;
+            color: #E1AA00;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .kids-data-value {
+            color: #333333;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 3px;
+        }
+        
         /* Especial para campos largos */
         .field.iban .field-value,
         .field.cuota .field-value,
@@ -379,7 +500,8 @@ function generateStyledFormHTML(params, firmaUrl) {
         /* Evitar saltos de página problemáticos */
         .grid,
         .signature-section,
-        .final-legal {
+        .final-legal,
+        .kids-authorization {
             page-break-inside: avoid;
         }
     </style>
@@ -482,7 +604,122 @@ function generateStyledFormHTML(params, firmaUrl) {
                 <strong>Protección de Datos:</strong> De acuerdo con el Reglamento (UE) 2016/679 (RGPD) y la Ley Orgánica 3/2018 (LOPDGDD), se informa que el responsable del tratamiento de la información es Industrial Training, con la finalidad de gestionar inscripciones, cobros y actividades del gimnasio.
             </div>
         </div>
-    </div>
+    </div>`;
+
+  // Generar segunda página para autorización KIDS si es necesario
+  if (isKidsSubscription && parentName && parentDni) {
+    var fechaNacimientoFormateada = formatDateToDDMMYYYY(params.fecha_nacimiento || '');
+    var nombreCompleto = (params.nombre || '') + ' ' + (params.apellidos || '');
+    
+    html += `
+    
+    <!-- SEGUNDA PÁGINA - AUTORIZACIÓN DE MENOR -->
+    <div class="container page-break">
+        <div class="header">
+            <div class="logo-container">`;
+            
+    if (logoDataUrl) {
+      html += `<img src="${logoDataUrl}" alt="Industrial Training" class="logo">`;
+    }
+    
+    html += `
+            </div>
+            <div class="header-title">Autorización de Menor de Edad</div>
+        </div>
+        <div class="content">
+            <div class="grid">
+                <div class="field full-width">
+                    <div class="field-label">Datos del Menor</div>
+                    <div class="field-value">${nombreCompleto}</div>
+                </div>
+                
+                <div class="field">
+                    <div class="field-label">Fecha de Nacimiento</div>
+                    <div class="field-value">${fechaNacimientoFormateada}</div>
+                </div>
+                <div class="field">
+                    <div class="field-label">DNI del Menor</div>
+                    <div class="field-value">${params.dni || '-'}</div>
+                </div>
+                
+                <div class="field">
+                    <div class="field-label">Cuota Contratada</div>
+                    <div class="field-value">${params.cuota || '-'}</div>
+                </div>
+                <div class="field">
+                    <div class="field-label">Fecha de Contratación</div>
+                    <div class="field-value">${params.fecha_actual || '-'}</div>
+                </div>
+                
+                <div class="field full-width">
+                    <div class="field-label">Padre/Madre/Tutor Legal</div>
+                    <div class="field-value">${parentName}</div>
+                </div>
+                
+                <div class="field full-width">
+                    <div class="field-label">DNI del Tutor</div>
+                    <div class="field-value">${parentDni}</div>
+                </div>
+                
+                <div class="field full-width">
+                    <div class="field-label">Derechos de Imagen del Menor</div>
+                    <div class="field-value">${params.imagen || 'No especificado'}</div>
+                </div>
+            </div>
+            
+            <div style="background: #ffffff; padding: 15px; border-radius: 6px; border: 1px solid #d1d5db; margin: 15px 0; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+                <div style="font-size: 16px; font-weight: bold; color: #E1AA00; text-align: center; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;">
+                    AUTORIZACIÓN DE MENOR DE EDAD
+                </div>
+                
+                <div style="font-size: 13px; line-height: 1.5; color: #333333; margin-bottom: 15px; text-align: justify;">
+                    <strong>Yo, ${parentName}, con DNI ${parentDni}</strong>, como padre/madre/tutor legal del menor que se describe anteriormente, 
+                    <strong>AUTORIZO</strong> expresamente su participación en las actividades deportivas de 
+                    <strong>Industrial Training</strong> y asumo la responsabilidad que me corresponde como representante legal del menor.
+                </div>
+                
+                <div style="font-size: 13px; line-height: 1.5; color: #333333; margin-bottom: 15px; text-align: justify;">
+                    Asimismo, <strong>CONSIENTO</strong> que el centro actúe en caso de emergencia médica que pueda afectar al menor, 
+                    adoptando las medidas que considere oportunas para salvaguardar su salud e integridad física, 
+                    incluyendo el traslado a centros sanitarios y la autorización de tratamientos médicos de urgencia.
+                </div>
+                
+                <div style="margin-top: 25px; text-align: center; font-weight: bold; color: #E1AA00; font-size: 13px;">
+                    Esta autorización permanecerá vigente durante toda la duración de la membresía del menor 
+                    en Industrial Training, salvo revocación expresa por escrito.
+                </div>
+            </div>
+            
+            <!-- Firma duplicada en segunda página -->
+            <div class="signature-section">
+                <div class="field-label">Firma del Padre/Madre/Tutor Legal</div>`;
+                
+    if (firmaUrl && firmaUrl.indexOf('base64,') > -1) {
+      html += `<img src="${firmaUrl}" alt="Firma del tutor legal" class="signature-image">`;
+    } else {
+      html += `<div style="height: 44px; border: 1px dashed #ccc; display: flex; align-items: center; justify-content: center; color: #666; font-style: italic; font-size: 12px;">
+                    Firma no proporcionada
+                </div>`;
+    }
+    
+    html += `
+                <div style="margin-top: 15px; font-size: 12px; color: #333;">
+                    <strong>Firmado por:</strong> ${parentName}<br>
+                    <strong>DNI:</strong> ${parentDni}<br>
+                    <strong>Fecha:</strong> ${params.fecha_actual || new Date().toLocaleDateString('es-ES')}
+                </div>
+            </div>
+            
+            <div class="final-legal">
+                <strong>Responsabilidad Legal:</strong> El firmante declara ser el padre/madre/tutor legal del menor 
+                y tener capacidad legal suficiente para otorgar esta autorización. Esta declaración se realiza 
+                bajo la responsabilidad del firmante conforme a la legislación vigente.
+            </div>
+        </div>
+    </div>`;
+  }
+
+  html += `
 </body>
 </html>`;
 
@@ -566,4 +803,3 @@ function logToSheet(params, clienteFolder, datosFile, pdfFile, mainFolder) {
 function sanitizeFilename(name) {
   return name.replace(/[\/\\#%&\{\}\<>\*\? $!@:|"^`'\[\];=+]/g, '_').substring(0, 200);
 }
-
