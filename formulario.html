@@ -515,7 +515,7 @@
             canvas {
                 width: 100%;
                 max-width: 100%;
-                height: 120px;
+                height: 160px;
             }
 
             .radio-group, .checkbox-group {
@@ -559,7 +559,7 @@
             canvas {
                 width: 100%;
                 max-width: 500px;
-                height: 140px;
+                height: 180px;
             }
 
             .btn {
@@ -575,8 +575,8 @@
 
             canvas {
                 width: 100%;
-                max-width: 560px;
-                height: 160px;
+                max-width: 700px;
+                height: 200px;
             }
         }
 
@@ -587,8 +587,8 @@
             }
 
             canvas {
-                width: 560px;
-                height: 180px;
+                width: 780px;
+                height: 220px;
             }
         }
 
@@ -623,7 +623,7 @@
             }
 
             canvas {
-                height: 100px;
+                height: 140px;
             }
         }
 
@@ -648,6 +648,14 @@
                 width: 100% !important;
                 max-width: 100% !important;
             }
+        }
+
+        #autorizacionBlock h4 {
+            margin-bottom: 0.2em; /* espacio inferior reducido */
+        }
+
+        #autorizacionBlock p:first-of-type {
+            margin-top: 0.2em; /* espacio superior reducido */
         }
     </style>
 </head>
@@ -739,17 +747,38 @@
 
                     <div class="full">
                         <label>Cuota *</label>
-                        <select name="cuota" required>
+                        <select id="cuotaSelect" name="cuota" required>
                             <option value="">Selecciona...</option>
+                            <option>Bon día (55€/mes x 3 wods a la semana)</option>
                             <option>Bronce (55€/mes x 2 wods a la semana)</option>
                             <option>Plata (65€/mes x 3 wods a la semana)</option>
-                            <option>Oro (75€/mes x 3 wods a la semana)</option>
+                            <option>Oro (75€/mes x 4 wods a la semana)</option>
                             <option>Diamante (85€/mes x clases ilimitadas)</option>
                             <option>Boxeo (65€/mes x clases ilimitadas)</option>
-                            <option>Fusión (75€/mes x 2 wods y boxeo ilimitado)</option>
+                            <option>Bjj (65€/mes x clases ilimitadas)</option>
+                            <option>Fusión Boxeo (75€/mes x 2 wods y boxeo ilimitado)</option>
+                            <option>Fusión Bjj (75€/mes x 2 wods y bjj ilimitado)</option>
                             <option>KIDS (45€/mes x 1 Actividad)</option>
                             <option>KIDS DUO (65€/mes x 2 actividades)</option>
                         </select>
+
+                        <!-- Bloque de autorización, ahora único bloque visible para menor -->
+                        <div id="autorizacionBlock" hidden>
+                            <h4 style="margin-bottom: 0.2em;">AUTORIZACIÓN DE MENOR DE EDAD</h4>
+                            <p>
+                                Yo, <input type="text" id="parentName" name="parent_name" placeholder="Nombre del padre/madre/tutor">
+                                con DNI <input type="text" id="parentDNI" name="parent_dni" placeholder="DNI">, como padre/madre/tutor legal de:
+                            </p>
+                            <p style="font-weight: bold; font-size: 1.2em;">
+                                Menor: <span id="autorizacionChildName"></span><br>
+                                Fecha de nacimiento: <span id="autorizacionChildBirthDay"></span> / <span id="autorizacionChildBirthMonth"></span> / <span id="autorizacionChildBirthYear"></span>
+                            </p>
+                        </div>
+
+                        <p id="legalKids" class="muted-small" hidden>
+                            AUTORIZO su participación en las actividades deportivas de Industrial Training y asumo la responsabilidad que corresponde como representante legal del menor.
+                            Consiento también que el centro actúe en caso de emergencia médica.
+                        </p>
                     </div>
 
                     <div class="full">
@@ -794,7 +823,7 @@
                     <div class="full">
                         <label>Firma del cliente *</label>
                         <div class="firma-box">
-                            <canvas id="firma" width="560" height="180"></canvas>
+                            <canvas id="firma" width="780" height="220"></canvas>
                             <button type="button" id="borrar" class="btn secondary">Borrar firma</button>
                             <p class="muted-small" style="margin-top: 8px;">
                                 <strong>* Campo obligatorio:</strong> Firme en el recuadro superior para completar su inscripción.
@@ -853,6 +882,66 @@
     </div>
 
     <script>
+        const cuotaSelect = document.getElementById('cuotaSelect');
+        const legalKids = document.getElementById('legalKids');
+        const autorizacionBlock = document.getElementById('autorizacionBlock');
+
+        const autorizacionChildName = document.getElementById('autorizacionChildName');
+        const autorizacionChildBirthDay = document.getElementById('autorizacionChildBirthDay');
+        const autorizacionChildBirthMonth = document.getElementById('autorizacionChildBirthMonth');
+        const autorizacionChildBirthYear = document.getElementById('autorizacionChildBirthYear');
+
+        // Obtenemos los campos existentes del menor
+        const nombreInput = document.querySelector('input[name="nombre"]');
+        const apellidosInput = document.querySelector('input[name="apellidos"]');
+        const birthDay = document.getElementById('birth_day');
+        const birthMonth = document.getElementById('birth_month');
+        const birthYear = document.getElementById('birth_year');
+
+        // Función para actualizar el bloque de autorización
+        function actualizarAutorizacion() {
+            // Nombre completo
+            const nombre = nombreInput ? nombreInput.value.trim() : "";
+            const apellidos = apellidosInput ? apellidosInput.value.trim() : "";
+            autorizacionChildName.textContent = (nombre && apellidos) ? nombre + " " + apellidos : "";
+
+            // Fecha separada
+            autorizacionChildBirthDay.textContent = birthDay ? birthDay.value : "";
+            autorizacionChildBirthMonth.textContent = birthMonth ? birthMonth.value : "";
+            autorizacionChildBirthYear.textContent = birthYear ? birthYear.value : "";
+        }
+
+        // Mostrar/ocultar autorización y mensaje legal según cuota
+        cuotaSelect.addEventListener('change', function () {
+            const parentNameInput = document.getElementById('parentName');
+            const parentDniInput = document.getElementById('parentDNI');
+            
+            if (this.value.startsWith("KIDS")) {
+                legalKids.hidden = false;
+                autorizacionBlock.hidden = false;
+                actualizarAutorizacion();
+            } else {
+                legalKids.hidden = true;
+                autorizacionBlock.hidden = true;
+                // Limpiar campos KIDS cuando no es cuota KIDS
+                if (parentNameInput) {
+                    parentNameInput.value = '';
+                    parentNameInput.setCustomValidity('');
+                }
+                if (parentDniInput) {
+                    parentDniInput.value = '';
+                    parentDniInput.setCustomValidity('');
+                }
+            }
+        });
+
+        // Actualizar en tiempo real cuando cambien los campos del menor
+        if (nombreInput) nombreInput.addEventListener('input', actualizarAutorizacion);
+        if (apellidosInput) apellidosInput.addEventListener('input', actualizarAutorizacion);
+        if (birthDay) birthDay.addEventListener('change', actualizarAutorizacion);
+        if (birthMonth) birthMonth.addEventListener('change', actualizarAutorizacion);
+        if (birthYear) birthYear.addEventListener('change', actualizarAutorizacion);
+
         // Detectar si estamos en Google Apps Script y aplicar clases específicas
         function detectGoogleAppsScript() {
             // Verificar si estamos en un iframe (común en Apps Script)
@@ -1112,6 +1201,7 @@
             const dniInput = document.querySelector('input[name="dni"]');
             const ibanInput = document.querySelector('input[name="iban"]');
             const phoneInput = document.querySelector('input[name="telefono"]');
+            const parentDniInput = document.getElementById('parentDNI');
 
             // Validación DNI en tiempo real
             if (dniInput) {
@@ -1124,6 +1214,28 @@
                 });
 
                 dniInput.addEventListener('blur', function () {
+                    const dniValue = this.value.trim();
+                    if (dniValue) {
+                        const validation = validateDNI(dniValue);
+                        if (!validation.valid) {
+                            this.setCustomValidity(validation.error);
+                        } else {
+                            this.setCustomValidity('');
+                        }
+                    }
+                });
+            }
+
+            // Validación DNI del tutor (solo cuando la sección KIDS esté visible)
+            if (parentDniInput) {
+                parentDniInput.addEventListener('input', function () {
+                    let value = this.value.replace(/[^0-9a-zA-Z]/g, '').toUpperCase();
+                    if (value.length > 9) value = value.substring(0, 9);
+                    this.value = value;
+                    this.setCustomValidity('');
+                });
+
+                parentDniInput.addEventListener('blur', function () {
                     const dniValue = this.value.trim();
                     if (dniValue) {
                         const validation = validateDNI(dniValue);
@@ -1326,6 +1438,14 @@
                 document.getElementById('birth_month').selectedIndex = 0;
                 document.getElementById('birth_year').selectedIndex = 0;
                 document.getElementById('fecha_nacimiento_hidden').value = '';
+                // Limpiar campos KIDS
+                const parentNameInput = document.getElementById('parentName');
+                const parentDniInput = document.getElementById('parentDNI');
+                if (parentNameInput) parentNameInput.value = '';
+                if (parentDniInput) parentDniInput.value = '';
+                // Ocultar secciones KIDS
+                document.getElementById('legalKids').hidden = true;
+                document.getElementById('autorizacionBlock').hidden = true;
                 // Limpiar validaciones personalizadas
                 const dniInput = document.querySelector('input[name="dni"]');
                 const ibanInput = document.querySelector('input[name="iban"]');
@@ -1333,6 +1453,8 @@
                 if (dniInput) dniInput.setCustomValidity('');
                 if (ibanInput) ibanInput.setCustomValidity('');
                 if (phoneInput) phoneInput.setCustomValidity('');
+                if (parentNameInput) parentNameInput.setCustomValidity('');
+                if (parentDniInput) parentDniInput.setCustomValidity('');
             }
         }
 
@@ -1347,17 +1469,17 @@
             const availableWidth = Math.min(containerWidth - 20, deviceWidth - 40);
 
             if (deviceWidth <= 480) {
-                canvas.width = Math.min(availableWidth, 300);
-                canvas.height = 120;
-            } else if (deviceWidth <= 768) {
-                canvas.width = Math.min(availableWidth, 480);
-                canvas.height = 140;
-            } else if (deviceWidth <= 1024) {
-                canvas.width = Math.min(availableWidth, 540);
+                canvas.width = Math.min(availableWidth, 320);
                 canvas.height = 160;
-            } else {
-                canvas.width = 560;
+            } else if (deviceWidth <= 768) {
+                canvas.width = Math.min(availableWidth, 520);
                 canvas.height = 180;
+            } else if (deviceWidth <= 1024) {
+                canvas.width = Math.min(availableWidth, 700);
+                canvas.height = 200;
+            } else {
+                canvas.width = Math.min(availableWidth, 780);
+                canvas.height = 220;
             }
 
             // Asegurar que el canvas respete el contenedor padre
@@ -1490,6 +1612,42 @@
                     }
                 }
 
+                // Validar campos KIDS si la cuota es KIDS
+                const cuotaValue = document.getElementById('cuotaSelect').value;
+                if (cuotaValue && cuotaValue.startsWith('KIDS')) {
+                    const parentNameInput = document.getElementById('parentName');
+                    const parentDniInput = document.getElementById('parentDNI');
+                    
+                    if (!parentNameInput || !parentNameInput.value.trim()) {
+                        document.getElementById('errorText').innerHTML =
+                            '<strong>Datos del tutor requeridos:</strong><br>' +
+                            'Para las cuotas KIDS es obligatorio introducir el nombre del padre/madre/tutor legal.<br><br>' +
+                            'Por favor, complete todos los campos de autorización.';
+                        showMessage('errorMessage');
+                        return;
+                    }
+                    
+                    if (!parentDniInput || !parentDniInput.value.trim()) {
+                        document.getElementById('errorText').innerHTML =
+                            '<strong>DNI del tutor requerido:</strong><br>' +
+                            'Para las cuotas KIDS es obligatorio introducir el DNI del padre/madre/tutor legal.<br><br>' +
+                            'Por favor, complete todos los campos de autorización.';
+                        showMessage('errorMessage');
+                        return;
+                    }
+                    
+                    // Validar DNI del tutor
+                    const tutorDniValidation = validateDNI(parentDniInput.value.trim());
+                    if (!tutorDniValidation.valid) {
+                        document.getElementById('errorText').innerHTML =
+                            '<strong>DNI del tutor incorrecto:</strong><br>' +
+                            tutorDniValidation.error + '<br><br>' +
+                            'Por favor, revise el DNI del padre/madre/tutor legal.';
+                        showMessage('errorMessage');
+                        return;
+                    }
+                }
+
                 // Validar IBAN (siempre obligatorio)
                 if (!ibanInput || !ibanInput.value.trim()) {
                     document.getElementById('errorText').innerHTML =
@@ -1518,7 +1676,6 @@
                 const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                 const pixelData = imageData.data;
                 let hasContent = false;
-
 
                 // Revisar si hay algún pixel que no sea transparente
                 for (let i = 3; i < pixelData.length; i += 4) {
